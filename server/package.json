@@ -2,8 +2,8 @@
   "name": "community-well-being-center-server",
   "private": true,
   "scripts": {
-    "dev": "node --watch index.js",
-    "start": "node index.js"
+    "dev": "node --watch server.js",
+    "start": "node server.js"
   },
   "dependencies": {
     "cors": "^2.8.6",
