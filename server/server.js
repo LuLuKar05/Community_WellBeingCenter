@@ -1,113 +1,72 @@
+/**
+ * @file server.js
+ * @description Application entry point for the Community Wellbeing Center backend.
+ *
+ * This file is intentionally kept minimal. Its only responsibilities are:
+ *   1. Load environment variables from .env
+ *   2. Connect to MongoDB
+ *   3. Create the Express application
+ *   4. Mount global middleware (CORS, body parsing)
+ *   5. Mount route handlers
+ *   6. Mount the centralized error handler (must always be last)
+ *   7. Start the HTTP server
+ *
+ * All business logic lives in /controllers.
+ * All URL routing lives in /routes.
+ * The database connection logic lives in /config/db.js.
+ * Error handling lives in /middleware/errorHandler.js.
+ */
 require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
-const mongoose = require("mongoose");
-const Stripe = require("stripe");
 
-const Donation = require("./models/Donation");
+const connectDB = require("./config/db");
+const paymentRoutes = require("./routes/paymentRoutes");
+const chatRoutes = require("./routes/chatRoutes");
+const errorHandler = require("./middleware/errorHandler");
 
+// ─── 1. Connect to Database ───────────────────────────────────────────────────
+// connectDB() logs success or exits the process on failure so the server
+// never starts in a state where it cannot reach the database.
+connectDB();
+
+// ─── 2. Create Express App ────────────────────────────────────────────────────
 const app = express();
-const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
-// --- 1. Middleware ---
-// Allow requests from your React frontend
-app.use(cors({ origin: "http://localhost:3000" }));
+// ─── 3. Global Middleware ─────────────────────────────────────────────────────
 
-// VERY IMPORTANT: The webhook route must be defined BEFORE express.json()
-// because Stripe requires the raw, unparsed body to verify security signatures.
-app.post(
-  "/api/webhook",
-  express.raw({ type: "application/json" }),
-  handleStripeWebhook,
-);
+// Allow cross-origin requests from the React/Next.js frontend.
+// CLIENT_URL defaults to localhost:3000 for local development.
+// In production, set CLIENT_URL in .env to the deployed frontend URL
+// (e.g. https://yourapp.com) so the CORS policy is properly restricted.
+app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:3000" }));
 
-// Now we can parse standard JSON bodies for all other routes
+// IMPORTANT — paymentRoutes MUST be mounted BEFORE express.json():
+//
+// The /api/webhook route inside paymentRoutes uses express.raw() to keep
+// the body as a raw Buffer. Stripe verifies its cryptographic signature
+// against those exact raw bytes. If express.json() ran first, it would
+// parse and re-serialise the body, changing the bytes and breaking the
+// signature check — every legitimate webhook would be rejected with 400.
+app.use("/api", paymentRoutes);
+
+// Parse JSON request bodies for all routes registered after this point.
+// (paymentRoutes is already mounted above and handles its own body parsing.)
 app.use(express.json());
 
-// --- 2. Database Connection ---
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ Connected to MongoDB"))
-  .catch((err) => console.error("❌ MongoDB connection error:", err));
+// ─── 4. Mount Routes ──────────────────────────────────────────────────────────
+app.use("/api", chatRoutes);
 
-// --- 3. The Payment Intent Route ---
-app.post("/api/create-payment-intent", async (req, res) => {
-  try {
-    const { amount, frequency, firstName, lastName, email } = req.body;
+// ─── 5. Centralized Error Handler ────────────────────────────────────────────
+// This MUST be the last app.use() call. Express identifies error-handling
+// middleware by its four-parameter signature (err, req, res, next).
+// Controllers call next(error) to route errors here instead of writing
+// repetitive res.status(500).json(...) blocks in every route.
+app.use(errorHandler);
 
-    if (!amount || amount < 1) {
-      return res.status(400).json({ error: "Invalid amount" });
-    }
-
-    // Convert pounds to pence (£25 -> 2500)
-    const amountInPence = amount * 100;
-
-    // Create the PaymentIntent in Stripe
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: amountInPence,
-      currency: "gbp",
-      metadata: { frequency, email },
-    });
-
-    // Save pending donation to MongoDB
-    const newDonation = await Donation.create({
-      firstName,
-      lastName,
-      email,
-      amount: amountInPence,
-      frequency,
-      status: "pending",
-      stripePaymentIntentId: paymentIntent.id,
-    });
-
-    // Send the secret key to React
-    res.json({
-      clientSecret: paymentIntent.client_secret,
-      donationId: newDonation._id,
-    });
-  } catch (error) {
-    console.error("Stripe Error:", error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// --- 4. The Webhook Handler (Security & Fulfillment) ---
-async function handleStripeWebhook(req, res) {
-  const sig = req.headers["stripe-signature"];
-  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
-
-  let event;
-
-  try {
-    // Verify the event actually came from Stripe
-    event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
-  } catch (err) {
-    console.error(`⚠️ Webhook signature verification failed: ${err.message}`);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
-  }
-
-  // Handle the event when payment is successful
-  if (event.type === "payment_intent.succeeded") {
-    const paymentIntent = event.data.object;
-
-    // Find the pending donation in our database and mark it as 'succeeded'
-    await Donation.findOneAndUpdate(
-      { stripePaymentIntentId: paymentIntent.id },
-      { status: "succeeded" },
-    );
-
-    console.log(
-      `✅ Payment for ${paymentIntent.amount} pence succeeded! Database updated.`,
-    );
-    // TODO: Trigger a "Thank You" email here in the future
-  }
-
-  // Tell Stripe we received the webhook successfully
-  res.json({ received: true });
-}
-
-// --- 5. Start Server ---
+// ─── 6. Start Server ─────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
