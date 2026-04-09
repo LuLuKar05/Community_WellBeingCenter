@@ -1,0 +1,88 @@
+/* components/FilterSidebar.module.css */
+
+.sidebar { 
+  width: 280px; 
+  flex-shrink: 0; 
+  position: sticky; 
+  top: 40px; 
+  
+  /* --- THE FIX: Allows the sticky sidebar to scroll --- */
+  max-height: calc(100vh - 80px); /* 80px accounts for the 40px top margin + padding */
+  overflow-y: auto;
+  
+  /* Hide scrollbar for a cleaner, editorial look */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.sidebar::-webkit-scrollbar { display: none; }
+
+.sidebarHeader { 
+  font-size: 1.4rem; 
+  font-weight: 700; 
+  margin: 0 0 20px 0; 
+  color: #111; 
+}
+
+/* Search Box */
+.searchWrapper { margin-bottom: 24px; }
+.searchInput {
+  width: 100%; padding: 12px 16px; border: 1px solid #ced4da; 
+  border-radius: 8px; font-size: 1rem; font-family: inherit; box-sizing: border-box;
+}
+.searchInput:focus { outline: none; border-color: #2b5c50; }
+
+/* Nested Accordion Filters */
+.accordionGroup { border-bottom: 1px solid #dee2e6; }
+.accordionGroup:first-of-type { border-top: 1px solid #dee2e6; }
+
+.accordionTrigger {
+  width: 100%; display: flex; justify-content: space-between; align-items: center;
+  background: transparent; border: none; padding: 16px 0; font-size: 1rem; 
+  font-weight: 600; color: #212529; cursor: pointer; font-family: inherit;
+}
+
+.chevron { transition: transform 0.3s ease; color: #6c757d; font-size: 0.8rem; }
+.chevronActive { transform: rotate(180deg); }
+
+/* Smooth Accordion Content */
+.accordionContent {
+  max-height: 0; 
+  overflow: hidden; 
+  transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+/* SECOND FIX: Increase max-height so large lists don't get cut off when open */
+.accordionContentActive {
+  max-height: 600px; 
+  padding-bottom: 16px;
+}
+
+/* Highly Accessible Custom Checkboxes */
+.checkboxLabel {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+  cursor: pointer; font-size: 0.95rem; color: #495057; transition: color 0.2s;
+}
+.checkboxLabel:hover { color: #111; }
+.checkboxLabel:last-child { margin-bottom: 0; }
+.checkboxLabel input { display: none; }
+
+.customCheck {
+  width: 20px; height: 20px; border: 2px solid #adb5bd; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+}
+
+.isChecked { background: #2b5c50; border-color: #2b5c50; }
+.isChecked::after { content: '✓'; color: #fff; font-size: 14px; font-weight: bold; }
+
+/* Mobile Layout */
+@media (max-width: 900px) {
+  .sidebar { 
+    width: 100%; 
+    position: relative; 
+    top: 0; 
+    margin-bottom: 20px; 
+    /* Remove sticky limitations on mobile */
+    max-height: none; 
+    overflow-y: visible;
+  }
+}

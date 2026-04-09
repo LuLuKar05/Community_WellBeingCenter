@@ -1,0 +1,237 @@
+/* EditorialDonation.module.css
+   ─────────────────────────────────────────────────────────────────────────────
+   Scoped styles for the WaysToGive / EditorialDonation section.
+
+   Global resets applied here:
+     - background, color, font-family are explicitly set so that whatever the
+       global body rule declares does not leak into this section.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* ─── SECTION SHELL ──────────────────────────────────────────────────────── */
+
+.section {
+  /* Reset globals so body background/color/font don't bleed in */
+  background-color: #faf9f7;
+  color: #1a1a1a;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+
+  padding: 10vh 0 12vh;
+  overflow: hidden;
+}
+
+/* ─── 12-COLUMN GRID ─────────────────────────────────────────────────────── */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 5%;
+
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: auto auto;
+  gap: 0 40px;
+}
+
+/* ─── EDITORIAL TEXT (cols 1-6, row 1) ──────────────────────────────────── */
+
+.textWrapper {
+  grid-column: 1 / 7;
+  grid-row: 1;
+  padding-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.eyebrow {
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #8c7a6b;
+  margin: 0;
+}
+
+.title {
+  font-family: var(--font-cormorant), 'Georgia', serif;
+  font-size: clamp(3.25rem, 4.5vw, 5.25rem);
+  font-weight: 400;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+/* The <em> inside the title — italic warm accent, no bold */
+.title em {
+  font-style: italic;
+  color: #8c7a6b;
+  font-weight: 300;
+}
+
+.description {
+  font-size: 1.075rem;
+  line-height: 1.78;
+  color: #555555;
+  font-weight: 300;
+  max-width: 88%;
+  margin: 0;
+}
+
+/* ─── PORTRAIT IMAGE (cols 8-13, rows 1-2) ───────────────────────────────── */
+
+.imageWrapper {
+  grid-column: 8 / 13;
+  grid-row: 1 / 3;
+  margin-top: 100px;
+  position: relative;
+
+  /* Defines the portrait container height */
+  aspect-ratio: 3 / 4;
+}
+
+.image {
+  object-fit: cover;
+  object-position: center top;
+}
+
+.caption {
+  margin-top: 14px;
+  font-size: 0.72rem;
+  color: #999999;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ─── DONATION WIDGET (cols 1-6, row 2) ─────────────────────────────────── */
+
+.widgetWrapper {
+  grid-column: 1 / 7;
+  grid-row: 2;
+  margin-top: 72px;
+  padding-top: 48px;
+  border-top: 1px solid #e4e0da;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.widgetTitle {
+  font-family: var(--font-cormorant), 'Georgia', serif;
+  font-size: 1.875rem;
+  font-weight: 400;
+  color: #1a1a1a;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+/* Amount preset grid */
+.amountGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.btnAmount {
+  background: transparent;
+  border: 1px solid #d8d2cc;
+  padding: 16px 0;
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+.btnAmount:hover {
+  background: #f0ebe5;
+  border-color: #b8afa8;
+}
+
+.btnAmountSelected {
+  background: #1a1a1a;
+  border-color: #1a1a1a;
+  color: #ffffff;
+}
+
+/* Primary CTA — rendered as a Link so it navigates to /donate */
+.btnSubmit {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: 1px solid #1a1a1a;
+  padding: 18px;
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.35s ease, color 0.35s ease;
+}
+
+.btnSubmit:hover {
+  background: #1a1a1a;
+  color: #ffffff;
+}
+
+/* Secondary navigation links */
+.secondaryLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.secondaryLinks span {
+  font-size: 0.9rem;
+  color: #888888;
+  font-weight: 300;
+}
+
+.link {
+  color: #1a1a1a;
+  font-weight: 600;
+  text-decoration: none;
+  margin-left: 4px;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.25s ease;
+}
+
+.link:hover {
+  border-bottom-color: #1a1a1a;
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0 6%;
+  }
+
+  .textWrapper {
+    padding-top: 0;
+  }
+
+  .description {
+    max-width: 100%;
+  }
+
+  /* Image moves below text on mobile — maintain portrait ratio */
+  .imageWrapper {
+    margin-top: 3rem;
+    aspect-ratio: 4 / 3; /* Landscape on small screens to save vertical space */
+  }
+
+  .widgetWrapper {
+    margin-top: 3rem;
+    padding-top: 2.5rem;
+  }
+}

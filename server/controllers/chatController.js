@@ -77,7 +77,7 @@ const flockAI = new OpenAI({
  */
 async function handleChat(req, res, next) {
   try {
-    const { message: userMessage } = req.body;
+    const { message: userMessage, history: chatHistory = [] } = req.body; // Destructure both message and chat history from the request body
 
     // --- Input Validation ---
     // Without this check, a missing or empty message would cause the OpenAI
@@ -184,6 +184,7 @@ async function handleChat(req, res, next) {
       messages: [
         // system: sets the chatbot's persona and restricts it to the context
         { role: "system", content: systemPrompt },
+        ...chatHistory, // Include previous chat history for conversational context (if any)
         // user: the actual question from the frontend
         { role: "user", content: userMessage },
       ],

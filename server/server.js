@@ -24,6 +24,7 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const paymentRoutes = require("./routes/paymentRoutes");
 const chatRoutes = require("./routes/chatRoutes");
+const programmeRoutes = require("./routes/programmeRoutes");
 const errorHandler = require("./middleware/errorHandler");
 
 // ─── 1. Connect to Database ───────────────────────────────────────────────────
@@ -57,6 +58,7 @@ app.use(express.json());
 
 // ─── 4. Mount Routes ──────────────────────────────────────────────────────────
 app.use("/api", chatRoutes);
+app.use("/api", programmeRoutes);
 
 // ─── 5. Centralized Error Handler ────────────────────────────────────────────
 // This MUST be the last app.use() call. Express identifies error-handling

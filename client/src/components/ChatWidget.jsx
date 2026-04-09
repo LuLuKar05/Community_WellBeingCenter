@@ -16,9 +16,15 @@ const QUICK_REPLIES = ['📅 Class Schedule', '💷 Pricing & Sliding Scale', '�
 
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([
-    { role: 'bot', content: `${getGreeting()} I am the Wellbeing Assistant. How can I support you today?` }
-  ]);
+  const [messages, setMessages] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = sessionStorage.getItem('wellbeing_chat');
+      if (saved) return JSON.parse(saved);
+    }
+    return [
+      { role: 'bot', content: `${getGreeting()} I am the Wellbeing Assistant. How can I support you today?` }
+    ];
+  });
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   
@@ -63,6 +69,10 @@ export default function ChatWidget() {
     isOpenRef.current = isOpen;
   }, [isOpen]);
 
+  useEffect(() => {
+    sessionStorage.setItem('wellbeing_chat', JSON.stringify(messages));
+  }, [messages]);
+
   const handleSend = async (text) => {
     if (!text.trim() || isLoading) return;
 
@@ -73,12 +83,22 @@ export default function ChatWidget() {
 
     try {
       // Simulate network delay for "Illusion of Life" (HCI)
-      await new Promise(resolve => setTimeout(resolve, 800));
-
+      await new Promise(resolve => setTimeout(resolve, 800));// 
+      // --- NEW: The Sliding Window ---
+      // We only want to send the last 4 messages to save context limit and money.
+      // We filter out the 'isCrisis' flags because the LLM doesn't need to see those.
+      const rawHistory = messages.filter(m => m.role !== 'system');
+      
+      // Slice the last 4 messages (e.g., User -> Bot -> User -> Bot)
+      const slidingWindowHistory = rawHistory.slice(-4).map(m => ({
+        role: m.role === 'bot' ? 'assistant' : 'user', // LLMs expect the bot to be called 'assistant'
+        content: m.content
+      }));
+      
       const response = await fetch('http://localhost:5000/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userText }),
+        body: JSON.stringify({ message: userText, history: slidingWindowHistory }),
       });
 
       const data = await response.json();

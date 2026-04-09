@@ -1,0 +1,174 @@
+/* app/donate/Checkout.module.css */
+
+.checkoutContainer {
+  max-width: 1200px;
+  margin: 15vh auto;
+  padding: 0 5%;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 60px;
+}
+
+/* Left Side: Gift Summary */
+.summarySection {
+  grid-column: 1 / 6;
+  padding-top: 20px;
+}
+.summaryTitle {
+  font-family: var(--font-cormorant), serif;
+  font-size: 3rem;
+  font-weight: 400;
+  margin: 0 0 10px 0;
+}
+.summaryText {
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* Right Side: Form Area */
+.formSection {
+  grid-column: 7 / 13;
+  background: #f9f8f6;
+  padding: 50px;
+  border-radius: 4px;
+}
+.formGroup {
+  margin-bottom: 25px;
+}
+.formGroup label {
+  display: block;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #222;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.formInput {
+  width: 100%;
+  padding: 15px 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  font-family: 'Manrope', sans-serif;
+  font-size: 1.1rem;
+  outline: none;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+.formInput:focus {
+  border-bottom-color: #222;
+}
+
+/* Combined Smart Slider Widget */
+.smartWidgetWrapper {
+  margin-top: 10px;
+  background: #fff;
+  padding: 30px;
+  border: 1px solid #eee;
+  text-align: center;
+  border-radius: 4px;
+}
+.editableAmountWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.editableCurrency {
+  font-family: var(--font-cormorant), serif;
+  font-size: 3.5rem;
+  color: #222;
+  line-height: 1;
+}
+.editableInput {
+  font-family: var(--font-cormorant), serif;
+  font-size: 3.5rem;
+  color: #222;
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 150px; /* Accommodates £1000+ comfortably */
+  text-align: left;
+  margin-left: 5px;
+  border-bottom: 2px dashed transparent;
+  transition: border-color 0.3s;
+  padding: 0;
+}
+.editableInput:focus {
+  border-bottom-color: #ccc;
+}
+/* Hide default browser number arrows */
+.editableInput::-webkit-outer-spin-button,
+.editableInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Custom Range Slider */
+.customSlider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  background: #e0e0e0;
+  outline: none;
+  border-radius: 2px;
+}
+.customSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #222;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.customSlider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+.sliderLabels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  font-size: 0.85rem;
+  color: #999;
+  font-weight: 500;
+}
+
+/* Submit Button */
+.payButton {
+  width: 100%;
+  background: #222;
+  color: #fff;
+  border: none;
+  padding: 20px;
+  font-size: 1.1rem;
+  font-family: 'Manrope', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background 0.3s ease;
+}
+.payButton:hover {
+  background: #444;
+}
+.payButton:disabled {
+  background: #999;
+  cursor: not-allowed;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 900px) {
+  .checkoutContainer { 
+    display: flex; 
+    flex-direction: column; 
+    margin: 8vh auto; 
+    gap: 40px;
+  }
+  .formSection { 
+    padding: 30px 20px; 
+  }
+}

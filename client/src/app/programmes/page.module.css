@@ -1,0 +1,20 @@
+.layoutContainer { max-width: 1200px; margin: 60px auto; padding: 0 20px; display: flex; gap: 40px; align-items: flex-start; color: #212529; }
+
+.resultsArea { flex-grow: 1; min-width: 0; }
+.resultsHeader { margin-bottom: 24px; }
+.resultsTitle { font-size: 2rem; margin: 0 0 10px 0; color: #111; font-weight: 700; }
+.resultsMeta { color: #6c757d; font-size: 1rem; }
+
+.activeFilters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; }
+.activeChip {
+  background: #e9ecef; border: 1px solid #ced4da; padding: 6px 12px;
+  border-radius: 50px; font-size: 0.85rem; display: flex; align-items: center; gap: 8px;
+}
+.activeChip button { background: transparent; border: none; font-size: 1.2rem; line-height: 1; color: #495057; cursor: pointer; padding: 0; margin: 0; }
+.activeChip button:hover { color: #d9534f; }
+
+.emptyState { padding: 40px; text-align: center; color: #6c757d; background: #fff; border: 1px dashed #ced4da; border-radius: 12px; }
+
+@media (max-width: 900px) {
+  .layoutContainer { flex-direction: column; }
+}

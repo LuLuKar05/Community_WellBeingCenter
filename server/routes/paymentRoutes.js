@@ -44,6 +44,12 @@ router.post(
  *
  * Request body: { amount, frequency, email, firstName?, lastName? }
  */
-router.post("/create-payment-intent", createPaymentIntent);
+/**
+ * express.json() is applied at the route level here because paymentRoutes is
+ * mounted in server.js BEFORE the global express.json() middleware (that
+ * ordering is required to keep the webhook body unparsed). Without this,
+ * req.body would be undefined and destructuring amount/email/etc would crash.
+ */
+router.post("/create-payment-intent", express.json(), createPaymentIntent);
 
 module.exports = router;
