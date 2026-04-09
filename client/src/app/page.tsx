@@ -1,9 +1,10 @@
-import EditorialDonation from '../components/home/EditorialDonation';
+import EditorialDonation from "../components/home/EditorialDonation";
 
+/**
+ * Home page — publicly accessible.
+ * Auth buttons live in the global <Navbar> (rendered by RootLayout),
+ * so this page only needs to render its own content.
+ */
 export default function HomePage() {
-  return (
-    <main className="min-h-screen bg-gray-50">
-      <EditorialDonation />
-    </main>
-  );
+  return <EditorialDonation />;
 }

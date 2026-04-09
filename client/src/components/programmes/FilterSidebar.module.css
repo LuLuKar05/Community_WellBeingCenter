@@ -1,88 +1,115 @@
-/* components/FilterSidebar.module.css */
+/* FilterSidebar.module.css
+ * All values reference design tokens from globals.css.
+ */
 
-.sidebar { 
-  width: 280px; 
-  flex-shrink: 0; 
-  position: sticky; 
-  top: 40px; 
-  
-  /* --- THE FIX: Allows the sticky sidebar to scroll --- */
-  max-height: calc(100vh - 80px); /* 80px accounts for the 40px top margin + padding */
+.sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 40px;
+  max-height: calc(100vh - 80px);
   overflow-y: auto;
-  
-  /* Hide scrollbar for a cleaner, editorial look */
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 .sidebar::-webkit-scrollbar { display: none; }
 
-.sidebarHeader { 
-  font-size: 1.4rem; 
-  font-weight: 700; 
-  margin: 0 0 20px 0; 
-  color: #111; 
+.sidebarHeader {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  color: var(--color-text-dark);
 }
 
-/* Search Box */
+/* Search box */
 .searchWrapper { margin-bottom: 24px; }
-.searchInput {
-  width: 100%; padding: 12px 16px; border: 1px solid #ced4da; 
-  border-radius: 8px; font-size: 1rem; font-family: inherit; box-sizing: border-box;
-}
-.searchInput:focus { outline: none; border-color: #2b5c50; }
 
-/* Nested Accordion Filters */
-.accordionGroup { border-bottom: 1px solid #dee2e6; }
-.accordionGroup:first-of-type { border-top: 1px solid #dee2e6; }
+.searchInput {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-lg);
+  font-size: 1rem;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--color-green);
+}
+
+/* Accordion filters */
+.accordionGroup { border-bottom: 1px solid var(--color-border-light); }
+.accordionGroup:first-of-type { border-top: 1px solid var(--color-border-light); }
 
 .accordionTrigger {
-  width: 100%; display: flex; justify-content: space-between; align-items: center;
-  background: transparent; border: none; padding: 16px 0; font-size: 1rem; 
-  font-weight: 600; color: #212529; cursor: pointer; font-family: inherit;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: transparent;
+  border: none;
+  padding: 16px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-dark);
+  cursor: pointer;
+  font-family: inherit;
 }
 
-.chevron { transition: transform 0.3s ease; color: #6c757d; font-size: 0.8rem; }
+.chevron { transition: transform var(--transition-slow); color: var(--color-text-neutral); font-size: 0.8rem; }
 .chevronActive { transform: rotate(180deg); }
 
-/* Smooth Accordion Content */
 .accordionContent {
-  max-height: 0; 
-  overflow: hidden; 
-  transition: max-height 0.3s ease, padding 0.3s ease;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--transition-slow), padding var(--transition-slow);
 }
 
-/* SECOND FIX: Increase max-height so large lists don't get cut off when open */
 .accordionContentActive {
-  max-height: 600px; 
+  max-height: 600px;
   padding-bottom: 16px;
 }
 
-/* Highly Accessible Custom Checkboxes */
+/* Custom checkboxes */
 .checkboxLabel {
-  display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
-  cursor: pointer; font-size: 0.95rem; color: #495057; transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: var(--color-text-body);
+  transition: color var(--transition-base);
 }
-.checkboxLabel:hover { color: #111; }
+
+.checkboxLabel:hover { color: var(--color-text-dark); }
 .checkboxLabel:last-child { margin-bottom: 0; }
 .checkboxLabel input { display: none; }
 
 .customCheck {
-  width: 20px; height: 20px; border: 2px solid #adb5bd; border-radius: 4px;
-  display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-border-input);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-base);
 }
 
-.isChecked { background: #2b5c50; border-color: #2b5c50; }
-.isChecked::after { content: '✓'; color: #fff; font-size: 14px; font-weight: bold; }
+.isChecked { background: var(--color-green); border-color: var(--color-green); }
+.isChecked::after { content: '✓'; color: var(--color-bg-card); font-size: 14px; font-weight: bold; }
 
-/* Mobile Layout */
+/* Mobile layout */
 @media (max-width: 900px) {
-  .sidebar { 
-    width: 100%; 
-    position: relative; 
-    top: 0; 
-    margin-bottom: 20px; 
-    /* Remove sticky limitations on mobile */
-    max-height: none; 
+  .sidebar {
+    width: 100%;
+    position: relative;
+    top: 0;
+    margin-bottom: 20px;
+    max-height: none;
     overflow-y: visible;
   }
 }

@@ -20,11 +20,13 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
+const { clerkMiddleware } = require("@clerk/express");
 
 const connectDB = require("./config/db");
 const paymentRoutes = require("./routes/paymentRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const programmeRoutes = require("./routes/programmeRoutes");
+const bookingRoutes = require("./routes/bookingRoutes");
 const errorHandler = require("./middleware/errorHandler");
 
 // ─── 1. Connect to Database ───────────────────────────────────────────────────
@@ -43,6 +45,11 @@ const app = express();
 // (e.g. https://yourapp.com) so the CORS policy is properly restricted.
 app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:3000" }));
 
+// Attach Clerk auth context to every request. This does NOT block unauthenticated
+// requests — it just makes getAuth(req) available in controllers.
+// Individual routes enforce auth by checking getAuth(req).userId themselves.
+app.use(clerkMiddleware());
+
 // IMPORTANT — paymentRoutes MUST be mounted BEFORE express.json():
 //
 // The /api/webhook route inside paymentRoutes uses express.raw() to keep
@@ -59,6 +66,7 @@ app.use(express.json());
 // ─── 4. Mount Routes ──────────────────────────────────────────────────────────
 app.use("/api", chatRoutes);
 app.use("/api", programmeRoutes);
+app.use("/api", bookingRoutes);
 
 // ─── 5. Centralized Error Handler ────────────────────────────────────────────
 // This MUST be the last app.use() call. Express identifies error-handling

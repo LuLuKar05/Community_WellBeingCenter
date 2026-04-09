@@ -1,26 +1,95 @@
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   DESIGN TOKENS — single source of truth for the whole project.
+   All CSS modules must reference these variables instead of hardcoding values.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ── Surfaces ─────────────────────────────────────────────────────────── */
+  --color-bg-page:    #faf9f7;   /* warm off-white — main page background */
+  --color-bg-main:    #faf9f7;   /* alias used by about/page.module.css */
+  --color-bg-card:    #ffffff;   /* card / wizard card backgrounds */
+  --color-bg-subtle:  #f0ede8;   /* panel tint, secondary sections */
+  --color-bg-hover:   #f0ebe5;   /* warm button hover fill */
+  --color-bg-muted:   #f8f9fa;   /* neutral light bg (ticket stubs, form panels) */
+  --color-bg-chip:    #e9ecef;   /* active filter chip background */
+
+  /* ── Text ─────────────────────────────────────────────────────────────── */
+  --color-text-primary:     #1a1a1a;  /* headings and strong text (warm editorial) */
+  --color-text-main:        #1a1a1a;  /* alias used by about/page.module.css */
+  --color-primary:          #1a1a1a;  /* alias used by about/page.module.css */
+  --color-text-dark:        #111827;  /* near-black (card titles, form labels) */
+  --color-text-secondary:   #4a4a4a;  /* warm body copy */
+  --color-text-body:        #495057;  /* neutral body copy */
+  --color-text-muted:       #6b6460;  /* warm captions and meta */
+  --color-text-neutral:     #6c757d;  /* neutral muted (Bootstrap-style components) */
+  --color-text-placeholder: #bbbbbb;  /* input placeholders */
+  --color-text-disabled:    #aaaaaa;  /* back buttons, inactive elements */
+  --color-text-hint:        #9ca3af;  /* loading states, prefix icons */
+
+  /* ── Borders ──────────────────────────────────────────────────────────── */
+  --color-border:        #e4e0da;  /* warm default border */
+  --color-border-medium: #d8d2cc;  /* warm medium (form inputs, preset buttons) */
+  --color-border-light:  #dee2e6;  /* neutral light (cards, accordion dividers) */
+  --color-border-input:  #ced4da;  /* neutral input border */
+
+  /* ── Accent (warm brown) ──────────────────────────────────────────────── */
+  --color-accent:       #8c7a6b;
+  --color-accent-hover: #b8afa8;
+
+  /* ── Green (category badges, filter checkboxes) ───────────────────────── */
+  --color-green: #2b5c50;
+
+  /* ── Blue (DonateWizard impact highlight) ─────────────────────────────── */
+  --color-blue:    #2563eb;
+  --color-blue-bg: #eff6ff;
+
+  /* ── Danger ───────────────────────────────────────────────────────────── */
+  --color-danger: #d9534f;
+
+  /* ── Feedback ─────────────────────────────────────────────────────────── */
+  --color-success:        #16a34a;
+  --color-success-bg:     #f0fdf4;
+  --color-success-border: #bbf7d0;
+  --color-error:          #991b1b;
+  --color-error-bg:       #fef2f2;
+  --color-error-border:   #fca5a5;
+
+  /* ── Typography ───────────────────────────────────────────────────────── */
+  --font-serif: var(--font-cormorant);  /* editorial serif — loaded in layout.tsx */
+  --font-sans:  var(--font-geist-sans); /* primary sans-serif — loaded in layout.tsx */
+  --font-mono:  var(--font-geist-mono); /* monospace — loaded in layout.tsx */
+
+  /* ── Border Radius ────────────────────────────────────────────────────── */
+  --radius-sm:   2px;   /* progress bars, sliders */
+  --radius-md:   4px;   /* buttons, small inputs */
+  --radius-lg:   8px;   /* image wrappers, cards */
+  --radius-xl:   12px;  /* ticket cards */
+  --radius-full: 50%;   /* circles: avatars, slider thumbs */
+
+  /* ── Transitions ──────────────────────────────────────────────────────── */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.2s ease;
+  --transition-slow: 0.3s ease;
+
+  /* ── Shadows ──────────────────────────────────────────────────────────── */
+  --shadow-card:       0 4px 15px rgba(0, 0, 0, 0.02);
+  --shadow-card-hover: 0 10px 25px rgba(0, 0, 0, 0.06);
+  --shadow-image:      0 25px 50px -12px rgba(0, 0, 0, 0.1);
 }
 
+/* ── Tailwind theme bridge ──────────────────────────────────────────────── */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--color-bg-page);
+  --color-foreground: var(--color-text-primary);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* ── Base ───────────────────────────────────────────────────────────────── */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  background: var(--color-bg-page);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }

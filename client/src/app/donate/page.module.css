@@ -1,4 +1,6 @@
-/* app/donate/Checkout.module.css */
+/* donate/page.module.css
+ * All values reference design tokens from globals.css.
+ */
 
 .checkoutContainer {
   max-width: 1200px;
@@ -9,166 +11,182 @@
   gap: 60px;
 }
 
-/* Left Side: Gift Summary */
+/* Left side: gift summary */
 .summarySection {
   grid-column: 1 / 6;
   padding-top: 20px;
 }
+
 .summaryTitle {
-  font-family: var(--font-cormorant), serif;
+  font-family: var(--font-serif), serif;
   font-size: 3rem;
   font-weight: 400;
   margin: 0 0 10px 0;
 }
+
 .summaryText {
   font-size: 1.1rem;
-  color: #666;
+  color: var(--color-text-muted);
   line-height: 1.6;
 }
 
-/* Right Side: Form Area */
+/* Right side: form area */
 .formSection {
   grid-column: 7 / 13;
-  background: #f9f8f6;
+  background: var(--color-bg-muted);
   padding: 50px;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
 }
+
 .formGroup {
   margin-bottom: 25px;
 }
+
 .formGroup label {
   display: block;
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #222;
+  color: var(--color-text-dark);
   margin-bottom: 8px;
   font-weight: 600;
 }
+
 .formInput {
   width: 100%;
   padding: 15px 0;
   background: transparent;
   border: none;
-  border-bottom: 1px solid #ccc;
-  font-family: 'Manrope', sans-serif;
+  border-bottom: 1px solid var(--color-border-input);
+  font-family: var(--font-sans), sans-serif;
   font-size: 1.1rem;
   outline: none;
-  transition: border-color 0.3s;
+  transition: border-color var(--transition-slow);
   box-sizing: border-box;
 }
+
 .formInput:focus {
-  border-bottom-color: #222;
+  border-bottom-color: var(--color-text-dark);
 }
 
-/* Combined Smart Slider Widget */
+/* Smart slider widget */
 .smartWidgetWrapper {
   margin-top: 10px;
-  background: #fff;
+  background: var(--color-bg-card);
   padding: 30px;
-  border: 1px solid #eee;
+  border: 1px solid var(--color-border-light);
   text-align: center;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
 }
+
 .editableAmountWrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
 }
+
 .editableCurrency {
-  font-family: var(--font-cormorant), serif;
+  font-family: var(--font-serif), serif;
   font-size: 3.5rem;
-  color: #222;
+  color: var(--color-text-dark);
   line-height: 1;
 }
+
 .editableInput {
-  font-family: var(--font-cormorant), serif;
+  font-family: var(--font-serif), serif;
   font-size: 3.5rem;
-  color: #222;
+  color: var(--color-text-dark);
   background: transparent;
   border: none;
   outline: none;
-  width: 150px; /* Accommodates £1000+ comfortably */
+  width: 150px;
   text-align: left;
   margin-left: 5px;
   border-bottom: 2px dashed transparent;
-  transition: border-color 0.3s;
+  transition: border-color var(--transition-slow);
   padding: 0;
 }
+
 .editableInput:focus {
-  border-bottom-color: #ccc;
+  border-bottom-color: var(--color-border-input);
 }
-/* Hide default browser number arrows */
+
 .editableInput::-webkit-outer-spin-button,
 .editableInput::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-/* Custom Range Slider */
+/* Custom range slider */
 .customSlider {
   -webkit-appearance: none;
+  appearance: none;
   width: 100%;
   height: 4px;
-  background: #e0e0e0;
+  background: var(--color-border-light);
   outline: none;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
 }
+
 .customSlider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 28px;
   height: 28px;
-  border-radius: 50%;
-  background: #222;
+  border-radius: var(--radius-full);
+  background: var(--color-text-dark);
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: transform var(--transition-base);
 }
+
 .customSlider::-webkit-slider-thumb:hover {
   transform: scale(1.1);
 }
+
 .sliderLabels {
   display: flex;
   justify-content: space-between;
   margin-top: 15px;
   font-size: 0.85rem;
-  color: #999;
+  color: var(--color-text-placeholder);
   font-weight: 500;
 }
 
-/* Submit Button */
+/* Submit button */
 .payButton {
   width: 100%;
-  background: #222;
-  color: #fff;
+  background: var(--color-text-dark);
+  color: var(--color-bg-card);
   border: none;
   padding: 20px;
   font-size: 1.1rem;
-  font-family: 'Manrope', sans-serif;
+  font-family: var(--font-sans), sans-serif;
   text-transform: uppercase;
   letter-spacing: 2px;
   cursor: pointer;
   margin-top: 20px;
-  transition: background 0.3s ease;
+  transition: background var(--transition-slow);
 }
+
 .payButton:hover {
-  background: #444;
+  background: var(--color-text-secondary);
 }
+
 .payButton:disabled {
-  background: #999;
+  background: var(--color-text-disabled);
   cursor: not-allowed;
 }
 
-/* Mobile Adjustments */
+/* Mobile */
 @media (max-width: 900px) {
-  .checkoutContainer { 
-    display: flex; 
-    flex-direction: column; 
-    margin: 8vh auto; 
+  .checkoutContainer {
+    display: flex;
+    flex-direction: column;
+    margin: 8vh auto;
     gap: 40px;
   }
-  .formSection { 
-    padding: 30px 20px; 
+  .formSection {
+    padding: 30px 20px;
   }
 }

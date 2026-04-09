@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect, useCallback } from 'react';
+import { useAuth } from '@clerk/nextjs';
 import styles from './page.module.css';
 import TicketCard from '../../components/programmes/Card';
 import FilterSidebar from '../../components/programmes/FilterSidebar';
@@ -7,14 +8,16 @@ import FilterSidebar from '../../components/programmes/FilterSidebar';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 export default function DirectoryPage() {
+  const { isSignedIn, getToken } = useAuth();
+
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({ category: [], day: [], time: [] });
   const [programmes, setProgrammes] = useState([]);
+  const [bookedIds, setBookedIds] = useState(new Set());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   // Fetch programmes from the API whenever search or filters change.
-  // useCallback memoises the function so the useEffect dependency is stable.
   const fetchProgrammes = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -38,11 +41,24 @@ export default function DirectoryPage() {
   }, [searchQuery, filters]);
 
   // Debounce: wait 300ms after the user stops typing before firing the fetch.
-  // Filter chip changes (no typing) fire immediately via the dependency update.
   useEffect(() => {
     const timer = setTimeout(fetchProgrammes, 300);
     return () => clearTimeout(timer);
   }, [fetchProgrammes]);
+
+  // Fetch the signed-in user's bookings so we can mark cards as "Registered".
+  useEffect(() => {
+    if (!isSignedIn) { setBookedIds(new Set()); return; }
+
+    getToken().then((token) =>
+      fetch(`${API_URL}/api/bookings/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((r) => r.json())
+        .then((bookings) => setBookedIds(new Set(bookings.map((b) => String(b.programmeId)))))
+        .catch(() => {/* silently ignore — user just won't see Registered state */})
+    );
+  }, [isSignedIn, getToken]);
 
   const toggleFilter = (group, value) => {
     setFilters(prev => {
@@ -103,19 +119,22 @@ export default function DirectoryPage() {
             </div>
           )}
 
-          {!error && programmes.map(item => (
-            <TicketCard
-              key={item._id}
-              category={item.category}
-              title={item.title}
-              description={item.description}
-              imageSrc={item.image}
-              imageAlt={item.title}
-              metaText={`${item.day} · ${item.timeStr}`}
-              linkUrl={`/programmes/${item._id}`}
-              buttonText="Book Now"
-            />
-          ))}
+          {!error && programmes.map(item => {
+            const isBooked = bookedIds.has(String(item._id));
+            return (
+              <TicketCard
+                key={item._id}
+                category={item.category}
+                title={item.title}
+                description={item.description}
+                imageSrc={item.image}
+                imageAlt={item.title}
+                metaText={`${item.day} · ${item.timeStr}`}
+                linkUrl={`/programmes/${item._id}`}
+                isBooked={isBooked}
+              />
+            );
+          })}
         </main>
       </div>
     </div>
