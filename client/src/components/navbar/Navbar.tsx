@@ -38,11 +38,13 @@ import { Show, SignInButton, UserButton } from "@clerk/nextjs";
 import styles from "./Navbar.module.css";
 
 // ── Nav link definitions — single source of truth ────────────────────────────
+// Donate is a standalone CTA button in the right slot, not in this list.
 const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/programmes", label: "Programmes" },
-  { href: "/donate", label: "Donate" },
   { href: "/about", label: "About" },
+  { href: "/contactUs", label: "Contact" },
+  { href: "/news", label: "News" },
 ];
 
 // ── Framer Motion variants ────────────────────────────────────────────────────
@@ -89,7 +91,10 @@ export default function Navbar({ foldSelector = DEFAULT_FOLD_SELECTOR }: NavbarP
   // ── Fold logic — IntersectionObserver on data-nav-fold elements ─────────────
   useEffect(() => {
     const targets = Array.from(document.querySelectorAll(foldSelector));
-    if (targets.length === 0) return;
+    if (targets.length === 0) {
+      setIsFolded(false);
+      return;
+    }
 
     // Sync check: fold immediately without waiting for observer first callback
     const anyVisible = targets.some((el) => {
@@ -134,7 +139,7 @@ export default function Navbar({ foldSelector = DEFAULT_FOLD_SELECTOR }: NavbarP
   // ── Render ───────────────────────────────────────────────────────────────────
   return (
     <>
-      <header className={`${styles.header} ${isFolded ? styles.folded : ""}`}>
+      <header className={`${styles.header} ${isFolded ? styles.folded : ""} ${isMenuOpen ? styles.menuOpen : ""}`}>
 
         {/* Brand */}
         <Link href="/" className={styles.brand} onClick={closeMenu}>
@@ -154,9 +159,14 @@ export default function Navbar({ foldSelector = DEFAULT_FOLD_SELECTOR }: NavbarP
           ))}
         </nav>
 
-        {/* Right slot: auth controls + hamburger */}
+        {/* Right slot: Donate CTA + auth + hamburger — always visible */}
         <div className={styles.rightSlot}>
-          {/* Auth — visible in desktop bar when not folded */}
+          {/* Donate CTA button */}
+          <Link href="/donate" className={styles.donateBtn} onClick={closeMenu}>
+            Donate
+          </Link>
+
+          {/* Auth — always visible in the bar */}
           <div className={styles.authArea}>
             <Show when="signed-out">
               <SignInButton mode="modal">
@@ -221,19 +231,7 @@ export default function Navbar({ foldSelector = DEFAULT_FOLD_SELECTOR }: NavbarP
               ))}
             </motion.ul>
 
-            {/* Auth in overlay */}
-            <div className={styles.overlayAuth}>
-              <Show when="signed-out">
-                <SignInButton mode="modal">
-                  <button className={styles.overlaySignInBtn} onClick={closeMenu}>
-                    Sign In
-                  </button>
-                </SignInButton>
-              </Show>
-              <Show when="signed-in">
-                <UserButton />
-              </Show>
-            </div>
+
           </motion.div>
         )}
       </AnimatePresence>

@@ -1,11 +1,19 @@
 /*
  * Navbar.module.css
  *
- * Context-aware navigation bar styled for the Community Wellbeing Center.
- * All colour and typography values reference design tokens from globals.css.
+ * All values reference design tokens from globals.css — no hardcoded colours.
+ * Token reference:
+ *   --color-primary     #2C402E  Forest green  (brand, active states, CTA bg)
+ *   --color-accent      #D4A373  Warm terracotta (Donate pill, underlines)
+ *   --color-accent-hover #C29161 Darker terracotta (hover fills)
+ *   --color-bg-page     #F8F9F5  Soft sage/cream (overlay bg)
+ *   --color-bg-card     #FFFFFF  Pure white (navbar bg)
+ *   --color-text-primary  #111827 Deep charcoal
+ *   --color-text-secondary #4B5563 Muted charcoal (nav links)
+ *   --color-border      #E5E7EB  Soft divider
  */
 
-/* ── Base bar ────────────────────────────────────────────────────────────────── */
+/* ── Base bar ─────────────────────────────────────────────────────────────── */
 
 .header {
   position: fixed;
@@ -19,7 +27,8 @@
   padding: 0 2.5rem;
   z-index: 1000;
 
-  background: rgba(255, 255, 255, 0.97);
+  /* --color-bg-card (#FFF) at 97% opacity for the frosted glass effect */
+  background: var(--color-primary);
   border-bottom: 1px solid var(--color-border);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -27,7 +36,7 @@
   transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
 }
 
-/* ── Folded state — transparent over hero / full-screen sections ─────────────── */
+/* ── Folded state — transparent over hero sections ────────────────────────── */
 
 .folded {
   background: transparent;
@@ -37,33 +46,67 @@
   box-shadow: none;
 }
 
-.folded .nav      { display: none; }
-.folded .authArea { display: none; }
+.folded .nav        { display: none; }
 .folded .menuButton { display: flex; }
+
+/* Folded: right-slot items go light to read over the dark hero image.
+   Using rgba of --color-bg-page (#F8F9F5 = 248 249 245) at various opacities. */
+.folded .brand { color: var(--color-bg-page); }
+
+.folded .donateBtn {
+  color: var(--color-bg-page);
+  border-color: rgba(248, 249, 245, 0.6);
+}
+.folded .donateBtn:hover {
+  background: rgba(248, 249, 245, 0.15);
+  color: var(--color-bg-page);
+}
+
+.folded .signInBtn {
+  background: rgba(248, 249, 245, 0.15);
+  color: var(--color-bg-page);
+}
+.folded .signInBtn:hover {
+  background: rgba(248, 249, 245, 0.3);
+}
 
 .folded .menuButton {
   color: var(--color-bg-page);
-  border-color: rgba(250, 249, 247, 0.3);
+  border-color: rgba(248, 249, 245, 0.3);
 }
-
 .folded .menuButton:hover {
   color: var(--color-bg-card);
-  border-color: rgba(250, 249, 247, 0.6);
-  background: rgba(250, 249, 247, 0.08);
+  border-color: rgba(248, 249, 245, 0.6);
+  background: rgba(248, 249, 245, 0.08);
 }
 
-.folded .brand {
-  color: var(--color-bg-page);
+/* When the overlay is open (--color-bg-page backdrop), revert to dark tokens */
+.menuOpen .donateBtn {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+.menuOpen .donateBtn:hover {
+  background: var(--color-accent);
+  color: var(--color-bg-card);
+}
+.menuOpen .signInBtn {
+  background: var(--color-primary);
+  color: var(--color-bg-card);
+}
+.menuOpen .menuButton {
+  /* rgba of --color-text-primary (#111827 = 17 24 39) at 20% */
+  color: var(--color-text-primary);
+  border-color: rgba(17, 24, 39, 0.2);
 }
 
-/* ── Brand ───────────────────────────────────────────────────────────────────── */
+/* ── Brand ────────────────────────────────────────────────────────────────── */
 
 .brand {
   font-family: var(--font-serif), Georgia, serif;
   font-size: 1.3rem;
   font-weight: 600;
   letter-spacing: 0.02em;
-  color: var(--color-text-primary);
+  color: var(--color-accent);
   text-decoration: none;
   white-space: nowrap;
   flex-shrink: 0;
@@ -74,7 +117,7 @@
   color: var(--color-accent);
 }
 
-/* ── Desktop nav links ───────────────────────────────────────────────────────── */
+/* ── Desktop nav links ────────────────────────────────────────────────────── */
 
 .nav {
   display: flex;
@@ -93,14 +136,14 @@
   font-weight: 500;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: var(--color-text-secondary);
+  color: var(--color-accent);
   text-decoration: none;
-  transition: color 0.25s ease;
+  transition: color var(--transition-base);
 }
 
 .navLink:hover,
 .active {
-  color: var(--color-text-primary);
+  color: var(--color-bg-card);
 }
 
 .active {
@@ -125,14 +168,38 @@
   width: 100%;
 }
 
-/* ── Right slot: auth + hamburger ────────────────────────────────────────────── */
+/* ── Right slot: Donate + auth + hamburger ────────────────────────────────── */
 
 .rightSlot {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  min-width: 120px;
+  gap: 0.75rem;
   justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+/* Donate CTA — outlined pill using accent token */
+.donateBtn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 1.1rem;
+  border: 1.5px solid var(--color-accent);
+  border-radius: var(--radius-pill);
+  color: var(--color-accent);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.donateBtn:hover {
+  background: var(--color-accent);
+  color: var(--color-bg-card);
 }
 
 .authArea {
@@ -140,16 +207,20 @@
   align-items: center;
 }
 
+/* Sign In — filled button using primary forest green */
 .signInBtn {
-  background: var(--color-text-primary);
+  background: var(--color-primary);
   color: var(--color-bg-card);
   border: none;
-  padding: 0.45rem 1.2rem;
-  font-size: 0.8rem;
+  padding: 0.45rem 1.1rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   cursor: pointer;
+  white-space: nowrap;
   transition: background var(--transition-fast);
 }
 
@@ -157,7 +228,7 @@
   background: var(--color-accent);
 }
 
-/* ── Hamburger button ────────────────────────────────────────────────────────── */
+/* ── Hamburger button ─────────────────────────────────────────────────────── */
 
 .menuButton {
   display: none;
@@ -166,19 +237,21 @@
   padding: 7px 10px;
   cursor: pointer;
   background: transparent;
-  color: var(--color-text-primary);
-  border: 1px solid rgba(26, 26, 26, 0.2);
+  color: var(--color-accent);
+  /* rgba of --color-text-primary (#111827 = 17 24 39) at 20% */
+  /* border: 1px solid rgba(17, 24, 39, 0.2); */
   border-radius: var(--radius-md);
   transition: color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
 }
 
 .menuButton:hover {
-  color: var(--color-accent);
-  border-color: rgba(140, 122, 107, 0.4);
-  background: rgba(140, 122, 107, 0.06);
+  color: var(--color-accent-hover);
+  /* rgba of --color-accent (#D4A373 = 212 163 115) at 40% and 6% */
+  border-color: rgba(212, 163, 115, 0.4);
+  background: rgba(212, 163, 115, 0.06);
 }
 
-/* ── Fullscreen overlay menu ─────────────────────────────────────────────────── */
+/* ── Fullscreen overlay menu ──────────────────────────────────────────────── */
 
 .overlay {
   position: fixed;
@@ -194,6 +267,8 @@
   align-items: center;
   justify-content: center;
   gap: 3rem;
+  /* Push content below the fixed navbar so first link is never obscured */
+  padding-top: 68px;
 }
 
 .overlayLinks {
@@ -211,10 +286,11 @@
   font-size: clamp(2.8rem, 7vw, 5.5rem);
   font-weight: 600;
   letter-spacing: -0.01em;
-  color: rgba(26, 26, 26, 0.2);
+  /* rgba of --color-text-primary (#111827 = 17 24 39) at 20% */
+  color: rgba(17, 24, 39, 0.2);
   text-decoration: none;
   text-transform: uppercase;
-  transition: color 0.25s ease;
+  transition: color var(--transition-base);
   display: block;
 }
 
@@ -223,39 +299,22 @@
 }
 
 .giantLinkActive {
-  color: var(--color-text-primary);
+  color: var(--color-primary);
 }
 
-.overlayAuth {
-  display: flex;
-  align-items: center;
-}
-
-.overlaySignInBtn {
-  background: transparent;
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-text-primary);
-  padding: 0.6rem 1.8rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background var(--transition-base), color var(--transition-base);
-}
-
-.overlaySignInBtn:hover {
-  background: var(--color-text-primary);
-  color: var(--color-bg-page);
-}
-
-/* ── Mobile / tablet (<1024px) ───────────────────────────────────────────────── */
+/* ── Mobile / tablet (<1024px) ────────────────────────────────────────────── */
 
 @media (max-width: 1023px) {
+  /* Nav links collapse into the hamburger overlay */
   .menuButton { display: flex; }
   .nav        { display: none; }
-  .authArea   { display: none; }
+  /* Auth + Donate stay visible in the persistent header */
   .header     { padding: 0 1.5rem; }
+}
+
+/* On very small screens, hide Donate to prevent overflow */
+@media (max-width: 400px) {
+  .donateBtn { display: none; }
 }
 
 @media (max-width: 480px) {

@@ -9,6 +9,8 @@ import { CheckCircle } from 'lucide-react';
 import CheckoutForm from './CheckoutForm';
 import styles from './DonateWizard.module.css';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+
 // ─── Static left panel ────────────────────────────────────────────────────────
 const LeftPanel = ({ safeAmount, impactSessions }) => (
   <aside className={styles.leftPanel}>
@@ -87,7 +89,7 @@ export default function DonateWizard() {
     setApiError('');
 
     try {
-      const res = await fetch('http://localhost:5000/api/create-payment-intent', {
+      const res = await fetch(`${API_URL}/api/create-payment-intent`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

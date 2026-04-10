@@ -12,6 +12,8 @@ const getGreeting = () => {
   return "Good evening!";
 };
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+
 const QUICK_REPLIES = ['📅 Class Schedule', '💷 Pricing & Sliding Scale', '📍 Location & Hours'];
 
 export default function ChatWidget() {
@@ -95,7 +97,7 @@ export default function ChatWidget() {
         content: m.content
       }));
       
-      const response = await fetch('http://localhost:5000/api/chat', {
+      const response = await fetch(`${API_URL}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: userText, history: slidingWindowHistory }),

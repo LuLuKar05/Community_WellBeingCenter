@@ -1,4 +1,8 @@
 import EditorialDonation from "../components/home/EditorialDonation";
+import ImpactStats from '../components/home/ImpactStats';
+import UpcomingSessionsPreview from "../components/home/UpcomingSessionsPreview";
+import PartnerGrid from "../components/home/PartnerGrid";
+import Hero from "../components/home/Hero";
 
 /**
  * Home page — publicly accessible.
@@ -6,5 +10,22 @@ import EditorialDonation from "../components/home/EditorialDonation";
  * so this page only needs to render its own content.
  */
 export default function HomePage() {
-  return <EditorialDonation />;
+  return (
+    <main>
+      {/* 1. HERO PLACEHOLDER */}
+      <Hero />
+
+      {/* 2. IMPACT STATS */}
+      <ImpactStats />
+
+      {/* 3. DONATION OVERLAP SECTION */}
+      <EditorialDonation />
+
+      {/* 4. CLASSES PREVIEW PLACEHOLDER */}
+      <UpcomingSessionsPreview />
+
+      {/* 5. PARTNER GRID */}
+      <PartnerGrid />
+    </main>
+);
 }

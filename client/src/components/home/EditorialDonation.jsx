@@ -8,9 +8,6 @@ import donationImage from '../../assets/Donate/donationPage1.jpg';
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-/**
- * Left column: large editorial headline + supporting description.
- */
 const EditorialText = () => (
   <div className={styles.textWrapper}>
     <p className={styles.eyebrow}>Ways to Give</p>
@@ -26,9 +23,6 @@ const EditorialText = () => (
   </div>
 );
 
-/**
- * Right column: portrait image with an optional caption.
- */
 const EditorialImage = ({ src, alt, caption }) => (
   <div className={styles.imageWrapper}>
     <Image
@@ -43,93 +37,38 @@ const EditorialImage = ({ src, alt, caption }) => (
   </div>
 );
 
-const DONATION_AMOUNTS = [25, 50, 100];
+const DONATION_AMOUNTS = [10, 50, 100];
 
-/**
- * Donation widget: amount selector + CTA + secondary navigation links.
- *
- * Each preset amount is a direct Link to /donate?amount=X so the donate page
- * pre-fills that amount automatically. "Make a Gift" links to /donate with no
- * preset, letting the user choose their own amount from scratch.
- */
-// const DonationWidget = () => (
-//   <div className={styles.widgetWrapper}>
-//     <h3 className={styles.widgetTitle}>Make a Gift</h3>
-
-//     <div className={styles.amountGrid}>
-//       {DONATION_AMOUNTS.map((amount) => (
-//         <Link
-//           key={amount}
-//           href={`/donate?amount=${amount}`}
-//           className={styles.btnAmount}
-//         >
-//           £{amount}
-//         </Link>
-//       ))}
-//     </div>
-
-//     <Link href="/donate" className={styles.btnSubmit}>
-//       Make a Gift
-//     </Link>
-
-//     <div className={styles.secondaryLinks}>
-//       <span>
-//         Want to give time?{' '}
-//         <Link href="/volunteer" className={styles.link}>Explore Volunteering</Link>
-//       </span>
-//       <span>
-//         Representing a business?{' '}
-//         <Link href="/sponsor" className={styles.link}>View Sponsorships</Link>
-//       </span>
-//     </div>
-//   </div>
-// );
 const DonationWidget = () => {
   const router = useRouter();
-  const amounts = [10, 50, 100]; 
-
-  // 1. Instantly route when a specific amount is clicked
-  const handleExpressDonation = (amount) => {
-    router.push(`/donate?amount=${amount}`);
-  };
-
-  // 2. Route without an amount when "Custom Amount" is clicked
-  const handleCustomAmount = () => {
-    router.push(`/donate`);
-  };
 
   return (
     <div className={styles.widgetWrapper}>
       <h3 className={styles.widgetTitle}>Ways to Give</h3>
-      
-      {/* The Express Amount Buttons */}
+
       <div className={styles.amountGrid}>
-        {amounts.map((amount) => (
+        {DONATION_AMOUNTS.map((amount) => (
           <button
             key={amount}
-            onClick={() => handleExpressDonation(amount)}
+            onClick={() => router.push(`/donate?amount=${amount}`)}
             className={styles.btnAmount}
-            // Add a little extra CSS inline or in your module to make these feel like action buttons
-            style={{ fontWeight: '600' }} 
           >
             Give £{amount}
           </button>
         ))}
       </div>
-      
-      {/* The Custom Amount Fallback */}
-      <button onClick={handleCustomAmount} className={styles.btnSubmit}>
+
+      <button onClick={() => router.push('/donate')} className={styles.btnSubmit}>
         Enter Custom Amount
       </button>
 
-      {/* Secondary Pathways Remain Untouched */}
       <div className={styles.secondaryLinks}>
         <span>Looking to give time? <Link href="/volunteer" className={styles.link}>Explore Volunteering</Link></span>
         <span>Represent a business? <Link href="/sponsor" className={styles.link}>View Sponsorships</Link></span>
       </div>
     </div>
   );
-}
+};
 
 // ─── Main export ──────────────────────────────────────────────────────────────
 

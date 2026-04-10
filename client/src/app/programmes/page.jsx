@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import styles from './page.module.css';
 import TicketCard from '../../components/programmes/Card';
@@ -79,7 +79,7 @@ export default function DirectoryPage() {
   );
 
   return (
-    <div style={{ backgroundColor: '#f8f9fa', minHeight: '100vh', padding: '1px 0' }}>
+    <div className={styles.pageShell}>
       <div className={styles.layoutContainer}>
 
         <FilterSidebar

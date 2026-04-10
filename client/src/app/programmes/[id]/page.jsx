@@ -3,13 +3,14 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import BookingWizard from '../../../components/BookingWizard';
+import styles from './detail.module.css';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 function LoadingSkeleton() {
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#faf9f7' }}>
-      <p style={{ color: '#8c7a6b', fontStyle: 'italic', fontSize: '1rem' }}>Loading programme…</p>
+    <div className={styles.loadingShell}>
+      <p className={styles.loadingText}>Loading programme…</p>
     </div>
   );
 }
@@ -17,12 +18,9 @@ function LoadingSkeleton() {
 function NotFound() {
   const router = useRouter();
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#faf9f7', gap: '1rem' }}>
-      <h2 style={{ fontFamily: 'var(--font-cormorant), Georgia, serif', fontSize: '2rem', color: '#1a1a1a' }}>Programme not found</h2>
-      <button
-        onClick={() => router.push('/programmes')}
-        style={{ background: '#1a1a1a', color: '#fff', border: 'none', padding: '0.75rem 2rem', cursor: 'pointer', fontSize: '0.85rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}
-      >
+    <div className={styles.notFoundShell}>
+      <h2 className={styles.notFoundTitle}>Programme not found</h2>
+      <button className={styles.notFoundBtn} onClick={() => router.push('/programmes')}>
         Back to Programmes
       </button>
     </div>

@@ -2,6 +2,12 @@
  * All values reference design tokens from globals.css.
  */
 
+.pageShell {
+  background: var(--color-bg-page);
+  min-height: 100vh;
+  padding: 1px 0;
+}
+
 .layoutContainer {
   max-width: 1200px;
   margin: 60px auto;
