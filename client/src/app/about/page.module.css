@@ -1,0 +1,141 @@
+/* about/page.module.css
+ * All values reference design tokens from globals.css.
+ */
+
+.main {
+  background-color: var(--color-bg-main);
+  min-height: 100vh;
+  padding-bottom: 6rem;
+}
+
+.section {
+  padding: 6rem 5% 0;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+  margin-bottom: 6rem;
+}
+
+.heroTitle {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(3rem, 5vw, 4.5rem);
+  color: var(--color-primary);
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+}
+
+.heroText {
+  font-size: 1.25rem;
+  color: var(--color-text-muted);
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+/* Z-pattern storytelling rows */
+.row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: center;
+  margin-bottom: 8rem;
+}
+
+@media (min-width: 1024px) {
+  .row {
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+  }
+
+  .textFirst  { order: 1; }
+  .imgSecond  { order: 2; }
+  .imgFirst   { order: 1; }
+  .textSecond { order: 2; }
+}
+
+.imageWrapper {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-image);
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.imageWrapper:hover .image {
+  transform: scale(1.03);
+}
+
+.subtitle {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 2.5rem;
+  color: var(--color-text-main);
+  margin-bottom: 1.5rem;
+}
+
+.bodyText {
+  color: var(--color-text-muted);
+  font-size: 1.125rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+/* Team section */
+.teamSection {
+  text-align: center;
+  margin-top: 8rem;
+}
+
+.teamGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 3rem;
+  margin-top: 4rem;
+}
+
+.teamCard {
+  background: var(--color-bg-card);
+  padding: 2.5rem 1.5rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-card);
+  transition: transform var(--transition-slow);
+}
+
+.teamCard:hover {
+  transform: translateY(-5px);
+}
+
+.teamImg {
+  width: 120px;
+  height: 120px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  margin: 0 auto 1.5rem;
+  border: 3px solid var(--color-bg-main);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.memberName {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.5rem;
+  color: var(--color-text-main);
+  margin-bottom: 0.25rem;
+}
+
+.memberRole {
+  color: var(--color-accent);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}

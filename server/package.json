@@ -2,14 +2,16 @@
   "name": "community-well-being-center-server",
   "private": true,
   "scripts": {
-    "dev": "node --watch index.js",
-    "start": "node index.js"
+    "dev": "node --watch server.js",
+    "start": "node server.js"
   },
   "dependencies": {
+    "@clerk/express": "^2.1.0",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^4.22.1",
     "mongoose": "^9.3.3",
+    "openai": "^6.33.0",
     "stripe": "^21.0.1"
   },
   "engines": {

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex Chen | Noir Portfolio</title>
+    <style>
+        /* CSS Variables for pure Black & White */
+        :root {
+            --black: #050505; /* Rich Black to reduce eye strain */
+            --white: #F4F4F4; /* Off-white for halation control */
+            --x: 50%;
+            --y: 50%;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: crosshair; /* Adds to the detective/sniper/search vibe */
+        }
+
+        body {
+            background-color: var(--black);
+            color: var(--white);
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            overflow: hidden; /* Prevents scrolling for the landing page */
+            height: 100vh;
+        }
+
+        /* * LAYER 1: The Hidden Background (Revealed by light)
+         * This uses a CSS pattern to simulate a comic book Halftone/Dot effect
+         */
+        .searchlight-reveal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--white);
+            background-image: radial-gradient(var(--black) 15%, transparent 16%), 
+                              radial-gradient(var(--black) 15%, transparent 16%);
+            background-size: 12px 12px; /* Halftone dot size */
+            background-position: 0 0, 6px 6px;
+            
+            /* The Masking Magic */
+            -webkit-mask-image: radial-gradient(circle 250px at var(--x) var(--y), black 20%, transparent 80%);
+            mask-image: radial-gradient(circle 250px at var(--x) var(--y), black 20%, transparent 80%);
+            z-index: 1;
+        }
+
+        /* A hidden "target" in the halftone shadow */
+        .hidden-target {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            color: var(--black);
+            white-space: nowrap;
+            letter-spacing: -2px;
+            text-transform: uppercase;
+            /* Heavy comic-style drop shadow */
+            text-shadow: 6px 6px 0px rgba(0,0,0,0.3);
+        }
+
+        /* * LAYER 2: The Foreground UI (Always visible)
+         */
+        .ui-layer {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2rem 4rem;
+            pointer-events: none; /* Allows mouse to pass through to the background mask */
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .logo {
+            font-size: 3rem;
+            letter-spacing: 2px;
+        }
+
+        /* The Case File Navigation */
+        .nav-container {
+            text-align: right;
+            font-family: 'Courier New', Courier, monospace; /* Typewriter feel */
+            font-weight: bold;
+        }
+
+        .nav-label {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            display: block;
+            border-bottom: 1px solid var(--white);
+            padding-bottom: 5px;
+        }
+
+        .nav-links {
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1.2rem;
+            pointer-events: auto; /* Makes links clickable */
+            transition: letter-spacing 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            letter-spacing: 4px;
+            background: var(--white);
+            color: var(--black);
+        }
+
+        /* Hero Text */
+        main {
+            text-align: left;
+            margin-top: -10vh;
+        }
+
+        .hero-title {
+            font-size: 7rem;
+            line-height: 0.9;
+            text-transform: uppercase;
+        }
+
+        /* Call to Action Button */
+        footer {
+            text-align: center;
+            padding-bottom: 2rem;
+        }
+
+        .uncover-btn {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: var(--black);
+            background-color: var(--white);
+            border: none;
+            padding: 1rem 3rem;
+            pointer-events: auto; /* Makes button clickable */
+            cursor: pointer;
+            text-transform: uppercase;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); /* Angular comic shape */
+            transition: all 0.3s ease;
+        }
+
+        .uncover-btn:hover {
+            background-color: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+            clip-path: polygon(0% 0, 100% 0, 100% 100%, 0% 100%);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="searchlight-reveal">
+        <div class="hidden-target">SUSPECT LOCATED</div>
+    </div>
+
+    <div class="ui-layer">
+        <header>
+            <div class="logo">ALEX CHEN</div>
+            <div class="nav-container">
+                <span class="nav-label">INDEX // CASE_FILES</span>
+                <ul class="nav-links">
+                    <li><a href="#">[ WORKS ]</a></li>
+                    <li><a href="#">[ ABOUT ]</a></li>
+                    <li><a href="#">[ CONTACT ]</a></li>
+                </ul>
+            </div>
+        </header>
+
+        <main>
+            <div class="hero-title">THE<br>PORTFOLIO</div>
+        </main>
+
+        <footer>
+            <button class="uncover-btn">UNCOVER</button>
+        </footer>
+    </div>
+
+    <script>
+        // JavaScript to track the mouse and update the CSS variables for the mask
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth) * 100;
+            const y = (e.clientY / window.innerHeight) * 100;
+            
+            // Update the CSS variables on the root element
+            document.documentElement.style.setProperty('--x', `${x}%`);
+            document.documentElement.style.setProperty('--y', `${y}%`);
+        });
+
+        // Touch support for mobile devices
+        document.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            const x = (touch.clientX / window.innerWidth) * 100;
+            const y = (touch.clientY / window.innerHeight) * 100;
+            
+            document.documentElement.style.setProperty('--x', `${x}%`);
+            document.documentElement.style.setProperty('--y', `${y}%`);
+        });
+    </script>
+
+</body>
+</html>

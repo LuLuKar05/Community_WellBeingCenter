@@ -1,0 +1,341 @@
+/*
+ * Navbar.module.css
+ *
+ * All values reference design tokens from globals.css — no hardcoded colours.
+ * Token reference:
+ *   --color-primary     #2C402E  Forest green  (brand, active states, CTA bg)
+ *   --color-accent      #D4A373  Warm terracotta (Donate pill, underlines)
+ *   --color-accent-hover #C29161 Darker terracotta (hover fills)
+ *   --color-bg-page     #F8F9F5  Soft sage/cream (overlay bg)
+ *   --color-bg-card     #FFFFFF  Pure white (navbar bg)
+ *   --color-text-primary  #111827 Deep charcoal
+ *   --color-text-secondary #4B5563 Muted charcoal (nav links)
+ *   --color-border      #E5E7EB  Soft divider
+ */
+
+/* ── Base bar ─────────────────────────────────────────────────────────────── */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5rem;
+  z-index: 1000;
+
+  /* --color-bg-card (#FFF) at 97% opacity for the frosted glass effect */
+  background: var(--color-primary);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* ── Folded state — transparent over hero sections ────────────────────────── */
+
+.folded {
+  background: transparent;
+  border-bottom-color: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+}
+
+.folded .nav        { display: none; }
+.folded .menuButton { display: flex; }
+
+/* Folded: right-slot items go light to read over the dark hero image.
+   Using rgba of --color-bg-page (#F8F9F5 = 248 249 245) at various opacities. */
+.folded .brand { color: var(--color-bg-page); }
+
+/* Folded: heart icon goes light to show over the dark hero */
+.folded .donateBtn {
+  color: var(--color-bg-page);
+}
+.folded .donateBtn:hover {
+  color: var(--color-bg-card);
+}
+
+.folded .signInBtn {
+  background: rgba(248, 249, 245, 0.15);
+  color: var(--color-bg-page);
+}
+.folded .signInBtn:hover {
+  background: rgba(248, 249, 245, 0.3);
+}
+
+.folded .menuButton {
+  color: var(--color-bg-page);
+  border-color: rgba(248, 249, 245, 0.3);
+}
+.folded .menuButton:hover {
+  color: var(--color-bg-card);
+  border-color: rgba(248, 249, 245, 0.6);
+  background: rgba(248, 249, 245, 0.08);
+}
+
+/* When the overlay is open, revert heart icon to accent colour */
+.menuOpen .donateBtn {
+  color: var(--color-accent);
+}
+.menuOpen .donateBtn:hover {
+  color: var(--color-accent-hover);
+}
+.menuOpen .signInBtn {
+  background: var(--color-primary);
+  color: var(--color-bg-card);
+}
+.menuOpen .menuButton {
+  /* rgba of --color-text-primary (#111827 = 17 24 39) at 20% */
+  color: var(--color-text-primary);
+  border-color: rgba(17, 24, 39, 0.2);
+}
+
+/* ── Brand ────────────────────────────────────────────────────────────────── */
+
+.brand {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--color-accent);
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color var(--transition-base);
+}
+
+.brand:hover {
+  color: var(--color-accent);
+}
+
+/* ── Desktop nav links ────────────────────────────────────────────────────── */
+
+.nav {
+  display: flex;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navLink {
+  position: relative;
+  display: block;
+  padding: 8px 4px;
+  margin: 0 14px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color var(--transition-base);
+}
+
+.navLink:hover,
+.active {
+  color: var(--color-bg-card);
+}
+
+.active {
+  font-weight: 600;
+}
+
+.navLink::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 1.5px;
+  background-color: var(--color-accent);
+  border-radius: var(--radius-sm);
+  transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.navLink:hover::after,
+.active::after {
+  width: 100%;
+}
+
+/* ── Right slot: Donate + auth + hamburger ────────────────────────────────── */
+
+.rightSlot {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+/* Donate CTA — icon that expands to reveal label on hover */
+.donateBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  color: var(--color-accent);
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: color var(--transition-base);
+}
+
+.donateBtn:hover {
+  color: var(--color-accent-hover);
+}
+
+.donateBtnIcon {
+  flex-shrink: 0;
+  transition: transform var(--transition-base);
+}
+
+.donateBtn:hover .donateBtnIcon {
+  transform: scale(1.15);
+}
+
+/* Label slides in from left, hidden by default */
+.donateBtnLabel {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  max-width: 0;
+  overflow: hidden;
+  opacity: 0;
+  margin-left: 0;
+  transition: max-width 0.3s ease, opacity 0.2s ease, margin-left 0.3s ease;
+}
+
+.donateBtn:hover .donateBtnLabel {
+  max-width: 5rem;
+  opacity: 1;
+  margin-left: 0.4rem;
+}
+
+.authArea {
+  display: flex;
+  align-items: center;
+}
+
+/* Sign In — filled button using primary forest green */
+.signInBtn {
+  background: var(--color-primary);
+  color: var(--color-bg-card);
+  border: none;
+  padding: 0.45rem 1.1rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--transition-fast);
+}
+
+.signInBtn:hover {
+  background: var(--color-accent);
+}
+
+/* ── Hamburger button ─────────────────────────────────────────────────────── */
+
+.menuButton {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 10px;
+  cursor: pointer;
+  background: transparent;
+  color: var(--color-accent);
+  /* rgba of --color-text-primary (#111827 = 17 24 39) at 20% */
+  /* border: 1px solid rgba(17, 24, 39, 0.2); */
+  border-radius: var(--radius-md);
+  transition: color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.menuButton:hover {
+  color: var(--color-accent-hover);
+  /* rgba of --color-accent (#D4A373 = 212 163 115) at 40% and 6% */
+  border-color: rgba(212, 163, 115, 0.4);
+  background: rgba(212, 163, 115, 0.06);
+}
+
+/* ── Fullscreen overlay menu ──────────────────────────────────────────────── */
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--color-bg-page);
+  border-top: 3px solid var(--color-accent);
+  z-index: 990;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  /* Push content below the fixed navbar so first link is never obscured */
+  padding-top: 68px;
+}
+
+.overlayLinks {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.giantLink {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  /* rgba of --color-text-primary (#111827 = 17 24 39) at 20% */
+  color: rgba(17, 24, 39, 0.2);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color var(--transition-base);
+  display: block;
+}
+
+.giantLink:hover {
+  color: var(--color-accent);
+}
+
+.giantLinkActive {
+  color: var(--color-primary);
+}
+
+/* ── Mobile / tablet (<1024px) ────────────────────────────────────────────── */
+
+@media (max-width: 1023px) {
+  /* Nav links collapse into the hamburger overlay */
+  .menuButton { display: flex; }
+  .nav        { display: none; }
+  /* Auth + Donate stay visible in the persistent header */
+  .header     { padding: 0 1.5rem; }
+}
+
+/* On very small screens, shrink Donate text slightly to fit */
+@media (max-width: 400px) {
+  .donateBtn {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header { padding: 0 1rem; }
+}

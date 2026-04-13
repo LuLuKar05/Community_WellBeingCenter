@@ -1,0 +1,188 @@
+/* Card.module.css (Ticket card for programmes listing)
+ * All values reference design tokens from globals.css.
+ */
+
+.ticketCard {
+  display: flex;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-xl);
+  margin-bottom: 24px;
+  position: relative;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow var(--transition-base), transform var(--transition-base);
+  overflow: hidden;
+}
+
+.ticketCard:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+
+/* Left side: main body */
+.ticketMain {
+  flex-grow: 1;
+  display: flex;
+  padding: 20px;
+  gap: 24px;
+  align-items: center;
+}
+
+.imageWrapper {
+  width: 140px;
+  height: 140px;
+  flex-shrink: 0;
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.ticketImg {
+  object-fit: cover;
+}
+
+.ticketInfo {
+  flex-grow: 1;
+}
+
+.ticketCategory {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-green);
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.ticketTitle {
+  margin: 0 0 8px 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-text-dark);
+}
+
+.ticketDesc {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--color-text-body);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Right side: tear-off stub */
+.ticketStub {
+  width: 200px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  border-left: 2px dashed var(--color-border-light);
+  position: relative;
+}
+
+/* Semi-circle cutouts */
+.ticketStub::before,
+.ticketStub::after {
+  content: '';
+  position: absolute;
+  left: -13px;
+  width: 24px;
+  height: 24px;
+  background-color: var(--color-bg-muted);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border-light);
+}
+
+.ticketStub::before {
+  top: -13px;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  transform: rotate(45deg);
+}
+
+.ticketStub::after {
+  bottom: -13px;
+  border-bottom-color: transparent;
+  border-right-color: transparent;
+  transform: rotate(45deg);
+}
+
+.stubMeta {
+  font-size: 0.85rem;
+  color: var(--color-text-neutral);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.btnBook {
+  background: var(--color-text-dark);
+  color: var(--color-bg-card);
+  text-decoration: none;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background var(--transition-base);
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.btnBook:hover {
+  background: var(--color-green);
+}
+
+/* Shown when the user has already booked this programme */
+.btnRegistered {
+  display: block;
+  background: var(--color-bg-chip);
+  color: var(--color-text-neutral);
+  text-align: center;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.95rem;
+  width: 100%;
+  box-sizing: border-box;
+  cursor: default;
+  letter-spacing: 0.02em;
+}
+
+/* Mobile adjustments */
+@media (max-width: 700px) {
+  .ticketCard {
+    flex-direction: column;
+  }
+  .ticketMain {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  .imageWrapper {
+    width: 100%;
+    height: 180px;
+  }
+  .ticketStub {
+    width: 100%;
+    border-left: none;
+    border-top: 2px dashed var(--color-border-light);
+    padding: 25px 20px;
+    box-sizing: border-box;
+  }
+  .ticketStub::before {
+    top: -13px; left: -13px;
+    transform: rotate(-45deg);
+  }
+  .ticketStub::after {
+    top: -13px; right: -13px; left: auto; bottom: auto;
+    transform: rotate(135deg);
+  }
+}

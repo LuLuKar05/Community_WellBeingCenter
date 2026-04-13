@@ -1,0 +1,43 @@
+/* detail.module.css — loading and not-found states for programme detail page */
+
+.loadingShell,
+.notFoundShell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-page);
+}
+
+.notFoundShell {
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.loadingText {
+  color: var(--color-accent);
+  font-style: italic;
+  font-size: 1rem;
+}
+
+.notFoundTitle {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 2rem;
+  color: var(--color-text-primary);
+}
+
+.notFoundBtn {
+  background: var(--color-text-primary);
+  color: var(--color-bg-card);
+  border: none;
+  padding: 0.75rem 2rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background var(--transition-base);
+}
+
+.notFoundBtn:hover {
+  background: var(--color-accent);
+}

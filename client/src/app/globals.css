@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   EVIDENCE-BASED DESIGN TOKENS (Wellbeing Center UI)
+   Single source of truth for the project. 
+   Backed by Environmental Psychology and WCAG Accessibility Standards.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Biophilic Surfaces (Backgrounds) ─────────────────────────────────── 
+   * Rationale: Pure white emits high blue light, causing visual fatigue. 
+   * We use a soft sage/cream to reduce glare and mimic natural environments 
+   * (Blehm et al., 2005, Computer Vision Syndrome).
+   */
+  --color-bg-page:    #F8F9F5;   /* Soft sage/cream — main page background */
+  --color-bg-main:    #F8F9F5;   /* Alias for main backgrounds */
+  --color-bg-card:    #FFFFFF;   /* Pure white for elevated cards to create visual hierarchy */
+  --color-bg-subtle:  #EBEFE9;   /* Slightly darker sage for secondary panels */
+  --color-bg-hover:   #E3E7DF;   /* Hover states for interactive elements */
+  --color-bg-muted:   #F3F4F0;   /* Neutral light bg (ticket stubs, form panels) */
+  --color-bg-chip:    #E5E7EB;   /* Active filter chip background */
+
+  /* ── Brand & Attention Restoration Colors ─────────────────────────────── 
+   * Rationale: Green lowers physiological stress and restores directed attention 
+   * (Kaplan & Kaplan, 1989, Attention Restoration Theory). 
+   */
+  --color-primary:    #2C402E;   /* Deep forest green (Main brand, primary buttons, headings) */
+  --color-green:      #2C402E;   /* Alias for primary green */
+  
+  /* ── Grounding Accents ────────────────────────────────────────────────── 
+   * Rationale: Earthy tones provide warmth without triggering the "danger/urgency" 
+   * alarms in the brain associated with bright reds or oranges.
+   */
+  --color-accent:       #D4A373;  /* Warm earth / soft terracotta */
+  --color-accent-hover: #C29161;  /* Darker earth for hover states */
+
+  /* ── Accessible Text (Typography) ─────────────────────────────────────── 
+   * Rationale: Pure black on light backgrounds creates visual "halation" 
+   * for users with astigmatism. Deep charcoal meets WCAG AAA contrast 
+   * without straining the eyes.
+   */
+  --color-text-primary:     #111827;  /* Deep charcoal for primary text */
+  --color-text-main:        #111827;  /* Alias for standard text */
+  --color-text-dark:        #111827;  /* Near-black (card titles, form labels) */
+  --color-text-secondary:   #4B5563;  /* Muted charcoal for body copy */
+  --color-text-body:        #4B5563;  /* Alias for body copy */
+  --color-text-muted:       #6B7280;  /* Warm captions and meta info */
+  --color-text-neutral:     #6C757D;  /* Neutral muted */
+  --color-text-placeholder: #9CA3AF;  /* Input placeholders */
+  --color-text-disabled:    #D1D5DB;  /* Inactive elements */
+  --color-text-hint:        #9CA3AF;  /* Loading states, prefix icons */
+
+  /* ── Structural Borders ───────────────────────────────────────────────── */
+  --color-border:        #E5E7EB;  /* Soft divider */
+  --color-border-medium: #D1D5DB;  /* Input outlines */
+  --color-border-light:  #F3F4F6;  /* Very subtle card borders */
+  --color-border-input:  #D1D5DB;  /* Form inputs */
+
+  /* ── Feedback & System Colors ─────────────────────────────────────────── */
+  --color-blue:           #2563EB;
+  --color-blue-bg:        #effff0;
+  --color-danger:         #DC2626;
+  --color-success:        #16A34A;
+  --color-success-bg:     #F0FDF4;
+  --color-success-border: #BBF7D0;
+  --color-success-text:   #065f46;
+  --color-error:          #991B1B;
+  --color-error-bg:       #FEF2F2;
+  --color-error-border:   #FCA5A5;
+
+  /* ── Dark-surface overlays (footer, hero overlay, dark panels) ──────────
+   * Used where the background is dark (--color-primary) and text/borders
+   * must be light. Cannot use rgba(var(--color-bg-card), X) in CSS yet,
+   * so these are pre-computed tokens.
+   */
+  --color-on-dark:        rgba(255, 255, 255, 0.75); /* body text on dark bg   */
+  --color-on-dark-muted:  rgba(255, 255, 255, 0.5);  /* captions, bottom bar   */
+  --color-on-dark-subtle: rgba(255, 255, 255, 0.4);  /* placeholder text       */
+  --color-on-dark-border: rgba(255, 255, 255, 0.15); /* dividers, input border */
+  --color-on-dark-panel:  rgba(255, 255, 255, 0.05); /* input fill             */
+  --color-on-dark-hover:  rgba(255, 255, 255, 0.1);  /* hover fill on dark bg  */
+
+  /* ── Typography Roles ─────────────────────────────────────────────────── 
+   * Rationale: Serif headings convey authority and trust. Sans-serif body text
+   * increases digital reading comprehension and accessibility (Tarjan, 2017).
+   */
+  --font-serif: var(--font-playfair); /* Assuming you will load Playfair Display in layout.jsx */
+  --font-sans:  var(--font-public-sans); /* Assuming you will load Public Sans in layout.jsx */
+  --font-mono:  var(--font-geist-mono); 
+
+  /* ── Border Radius (Friendly Geometry) ────────────────────────────────── */
+  --radius-sm:   4px;   
+  --radius-md:   8px;   
+  --radius-lg:   12px;  
+  --radius-xl:   16px;  
+  --radius-pill: 50px;  /* Pill shape for soft, approachable CTAs */
+  --radius-full: 50%;   
+
+  /* ── Transitions ──────────────────────────────────────────────────────── */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.2s ease;
+  --transition-slow: 0.3s ease;
+
+  /* ── Shadows (Depth & Hierarchy) ──────────────────────────────────────── */
+  --shadow-card:       0 4px 15px rgba(0, 0, 0, 0.02);
+  --shadow-card-hover: 0 10px 25px rgba(44, 64, 46, 0.06); /* Tinted with primary green */
+  --shadow-image:      0 25px 50px -12px rgba(0, 0, 0, 0.1);
+}
+
+/* ── Tailwind theme bridge ──────────────────────────────────────────────── */
+@theme inline {
+  --color-background: var(--color-bg-page);
+  --color-foreground: var(--color-text-primary);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
+/* ── Base ───────────────────────────────────────────────────────────────── */
+body {
+  background: var(--color-bg-page);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+}

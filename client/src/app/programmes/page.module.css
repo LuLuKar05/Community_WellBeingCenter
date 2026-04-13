@@ -1,0 +1,80 @@
+/* programmes/page.module.css
+ * All values reference design tokens from globals.css.
+ */
+
+.pageShell {
+  background: var(--color-bg-page);
+  min-height: 100vh;
+  padding: 1px 0;
+}
+
+.layoutContainer {
+  max-width: 1200px;
+  margin: 60px auto;
+  padding: 0 20px;
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  color: var(--color-text-dark);
+}
+
+.resultsArea  { flex-grow: 1; min-width: 0; }
+.resultsHeader { margin-bottom: 24px; }
+
+.resultsTitle {
+  font-size: 2rem;
+  margin: 0 0 10px 0;
+  color: var(--color-text-dark);
+  font-weight: 700;
+}
+
+.resultsMeta {
+  color: var(--color-text-neutral);
+  font-size: 1rem;
+}
+
+/* Active filter chips */
+.activeFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.activeChip {
+  background: var(--color-bg-chip);
+  border: 1px solid var(--color-border-input);
+  padding: 6px 12px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.activeChip button {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  line-height: 1;
+  color: var(--color-text-body);
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+}
+
+.activeChip button:hover { color: var(--color-danger); }
+
+/* Empty state */
+.emptyState {
+  padding: 40px;
+  text-align: center;
+  color: var(--color-text-neutral);
+  background: var(--color-bg-card);
+  border: 1px dashed var(--color-border-input);
+  border-radius: var(--radius-xl);
+}
+
+@media (max-width: 900px) {
+  .layoutContainer { flex-direction: column; }
+}
