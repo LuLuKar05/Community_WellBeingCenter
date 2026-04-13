@@ -2,6 +2,8 @@ import EditorialDonation from "../components/home/EditorialDonation";
 import ImpactStats from '../components/home/ImpactStats';
 import UpcomingSessionsPreview from "../components/home/UpcomingSessionsPreview";
 import PartnerGrid from "../components/home/PartnerGrid";
+import CorePillars from "../components/home/CorePillars";
+import CommunityVoices from "../components/home/CommunityVoices";
 import Hero from "../components/home/Hero";
 
 /**
@@ -18,11 +20,17 @@ export default function HomePage() {
       {/* 2. IMPACT STATS */}
       <ImpactStats />
 
+      {/* 2.5 CORE PILLARS */}
+      <CorePillars />
+
       {/* 3. DONATION OVERLAP SECTION */}
       <EditorialDonation />
 
       {/* 4. CLASSES PREVIEW PLACEHOLDER */}
       <UpcomingSessionsPreview />
+
+      {/* 4.5 COMMUNITY VOICES */}
+      <CommunityVoices />
 
       {/* 5. PARTNER GRID */}
       <PartnerGrid />

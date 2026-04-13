@@ -49,8 +49,8 @@
   font-family: var(--font-serif), serif;
   font-size: clamp(10rem, 20vw, 22rem);
   font-weight: 900;
-  color: var(--color-border); /* #E5E7EB */
-  opacity: 0.45;
+  color: var(--color-primary); /* #E5E7EB */
+  opacity: 0.20;
   z-index: 0;
   line-height: 0.8;
   letter-spacing: -0.05em;
@@ -71,31 +71,30 @@
   font-size: clamp(3rem, 4vw, 4.75rem);
   font-weight: 400;
   line-height: 1.1;
-  color: var(--color-text-dark);
+  color: var(--color-text-main);
   margin: 0;
 }
 
 .headlineHighlight {
-  color: var(--color-blue);
+  color: var(--color-accent);
   font-style: italic;
 }
 
 .description {
   font-size: 1.0625rem;
   line-height: 1.75;
-  color: var(--color-text-body);
+  color: var(--color-text-main);
   max-width: 38ch;
   margin: 0;
 }
 
 .impactEcho {
   font-size: 0.9375rem;
-  color: var(--color-blue);
+  color: var(--color-success-text);
   font-style: italic;
   margin: 0;
   padding: 0.875rem 1.25rem;
-  background: var(--color-blue-bg);
-  border-left: 3px solid var(--color-blue);
+  border-left: 3px solid var(--color-primary);
 }
 
 /* ── Right: wizard wrapper ───────────────────────────────────────────────────── */

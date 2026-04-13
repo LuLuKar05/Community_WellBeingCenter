@@ -29,7 +29,6 @@
 
   /* --color-bg-card (#FFF) at 97% opacity for the frosted glass effect */
   background: var(--color-primary);
-  border-bottom: 1px solid var(--color-border);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 
@@ -53,13 +52,12 @@
    Using rgba of --color-bg-page (#F8F9F5 = 248 249 245) at various opacities. */
 .folded .brand { color: var(--color-bg-page); }
 
+/* Folded: heart icon goes light to show over the dark hero */
 .folded .donateBtn {
   color: var(--color-bg-page);
-  border-color: rgba(248, 249, 245, 0.6);
 }
 .folded .donateBtn:hover {
-  background: rgba(248, 249, 245, 0.15);
-  color: var(--color-bg-page);
+  color: var(--color-bg-card);
 }
 
 .folded .signInBtn {
@@ -80,14 +78,12 @@
   background: rgba(248, 249, 245, 0.08);
 }
 
-/* When the overlay is open (--color-bg-page backdrop), revert to dark tokens */
+/* When the overlay is open, revert heart icon to accent colour */
 .menuOpen .donateBtn {
   color: var(--color-accent);
-  border-color: var(--color-accent);
 }
 .menuOpen .donateBtn:hover {
-  background: var(--color-accent);
-  color: var(--color-bg-card);
+  color: var(--color-accent-hover);
 }
 .menuOpen .signInBtn {
   background: var(--color-primary);
@@ -178,28 +174,49 @@
   flex-shrink: 0;
 }
 
-/* Donate CTA — outlined pill using accent token */
+/* Donate CTA — icon that expands to reveal label on hover */
 .donateBtn {
   display: inline-flex;
   align-items: center;
-  padding: 0.4rem 1.1rem;
-  border: 1.5px solid var(--color-accent);
-  border-radius: var(--radius-pill);
+  gap: 0;
   color: var(--color-accent);
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: color var(--transition-base);
+}
+
+.donateBtn:hover {
+  color: var(--color-accent-hover);
+}
+
+.donateBtnIcon {
+  flex-shrink: 0;
+  transition: transform var(--transition-base);
+}
+
+.donateBtn:hover .donateBtnIcon {
+  transform: scale(1.15);
+}
+
+/* Label slides in from left, hidden by default */
+.donateBtnLabel {
   font-family: var(--font-sans);
   font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  text-decoration: none;
   white-space: nowrap;
-  flex-shrink: 0;
-  transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+  max-width: 0;
+  overflow: hidden;
+  opacity: 0;
+  margin-left: 0;
+  transition: max-width 0.3s ease, opacity 0.2s ease, margin-left 0.3s ease;
 }
 
-.donateBtn:hover {
-  background: var(--color-accent);
-  color: var(--color-bg-card);
+.donateBtn:hover .donateBtnLabel {
+  max-width: 5rem;
+  opacity: 1;
+  margin-left: 0.4rem;
 }
 
 .authArea {
@@ -312,9 +329,11 @@
   .header     { padding: 0 1.5rem; }
 }
 
-/* On very small screens, hide Donate to prevent overflow */
+/* On very small screens, shrink Donate text slightly to fit */
 @media (max-width: 400px) {
-  .donateBtn { display: none; }
+  .donateBtn {
+    font-size: 0.7rem;
+  }
 }
 
 @media (max-width: 480px) {

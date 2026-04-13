@@ -35,6 +35,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Show, SignInButton, UserButton } from "@clerk/nextjs";
+import { HandHeart } from 'lucide-react';
 import styles from "./Navbar.module.css";
 
 // ── Nav link definitions — single source of truth ────────────────────────────
@@ -136,6 +137,14 @@ export default function Navbar({ foldSelector = DEFAULT_FOLD_SELECTOR }: NavbarP
   const toggleMenu = useCallback(() => setIsMenuOpen((prev) => !prev), []);
   const closeMenu  = useCallback(() => setIsMenuOpen(false), []);
 
+  // Active-ancestor match: exact for "/" so home doesn't light up everywhere,
+  // prefix match for all other segments (/programmes, /news, etc.)
+  const isActive = useCallback(
+    (href: string) =>
+      href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(href + "/"),
+    [pathname]
+  );
+
   // ── Render ───────────────────────────────────────────────────────────────────
   return (
     <>
@@ -143,7 +152,7 @@ export default function Navbar({ foldSelector = DEFAULT_FOLD_SELECTOR }: NavbarP
 
         {/* Brand */}
         <Link href="/" className={styles.brand} onClick={closeMenu}>
-          Community Wellbeing
+          Lumina
         </Link>
 
         {/* Desktop nav links */}
@@ -152,7 +161,7 @@ export default function Navbar({ foldSelector = DEFAULT_FOLD_SELECTOR }: NavbarP
             <Link
               key={href}
               href={href}
-              className={`${styles.navLink} ${pathname === href ? styles.active : ""}`}
+              className={`${styles.navLink} ${isActive(href) ? styles.active : ""}`}
             >
               {label}
             </Link>
@@ -163,7 +172,8 @@ export default function Navbar({ foldSelector = DEFAULT_FOLD_SELECTOR }: NavbarP
         <div className={styles.rightSlot}>
           {/* Donate CTA button */}
           <Link href="/donate" className={styles.donateBtn} onClick={closeMenu}>
-            Donate
+            <HandHeart size={25} strokeWidth={1.5} className={styles.donateBtnIcon} />
+            <span className={styles.donateBtnLabel}>Donate</span>
           </Link>
 
           {/* Auth — always visible in the bar */}

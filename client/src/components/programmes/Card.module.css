@@ -82,7 +82,6 @@
   justify-content: center;
   align-items: center;
   padding: 20px;
-  background: var(--color-bg-muted);
   border-left: 2px dashed var(--color-border-light);
   position: relative;
 }

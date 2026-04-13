@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import styles from './ChatWidget.module.css';
 
 // --- HELPER: Predictive Onboarding ---
 const getGreeting = () => {
@@ -29,7 +30,7 @@ export default function ChatWidget() {
   });
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  
+
   // Von Restorff Notification State
   const [unreadCount, setUnreadCount] = useState(0);
   const [previewText, setPreviewText] = useState('');
@@ -39,38 +40,37 @@ export default function ChatWidget() {
   const inputRef = useRef(null);
   const chatButtonRef = useRef(null);
   const isOpenRef = useRef(isOpen);
-  // --- a11y: Auto-Scroll ---
+
+  // Auto-Scroll
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isLoading]);
 
-  // --- a11y: Keyboard Management & Escape Hatch ---
+  // Keyboard Management & Escape Hatch
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && isOpen) {
         setIsOpen(false);
-        // Return focus to the toggle button so screen readers don't get lost
-        chatButtonRef.current?.focus(); 
+        chatButtonRef.current?.focus();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen]);
 
-  // --- a11y: Auto-focus input when opened ---
+  // Auto-focus input when opened
   useEffect(() => {
     if (isOpen) {
       inputRef.current?.focus();
-      setUnreadCount(0); // Clear notifications when opened
+      setUnreadCount(0);
       setPreviewText('');
     }
   }, [isOpen]);
 
-  // ADD THIS BLOCK: Keep the ref perfectly synced with the state
-  useEffect(() => {
-    isOpenRef.current = isOpen;
-  }, [isOpen]);
+  // Keep ref in sync with state
+  useEffect(() => { isOpenRef.current = isOpen; }, [isOpen]);
 
+  // Persist messages to sessionStorage
   useEffect(() => {
     sessionStorage.setItem('wellbeing_chat', JSON.stringify(messages));
   }, [messages]);
@@ -84,19 +84,14 @@ export default function ChatWidget() {
     setIsLoading(true);
 
     try {
-      // Simulate network delay for "Illusion of Life" (HCI)
-      await new Promise(resolve => setTimeout(resolve, 800));// 
-      // --- NEW: The Sliding Window ---
-      // We only want to send the last 4 messages to save context limit and money.
-      // We filter out the 'isCrisis' flags because the LLM doesn't need to see those.
+      await new Promise(resolve => setTimeout(resolve, 800));
+
       const rawHistory = messages.filter(m => m.role !== 'system');
-      
-      // Slice the last 4 messages (e.g., User -> Bot -> User -> Bot)
       const slidingWindowHistory = rawHistory.slice(-4).map(m => ({
-        role: m.role === 'bot' ? 'assistant' : 'user', // LLMs expect the bot to be called 'assistant'
+        role: m.role === 'bot' ? 'assistant' : 'user',
         content: m.content
       }));
-      
+
       const response = await fetch(`${API_URL}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -107,20 +102,15 @@ export default function ChatWidget() {
       const isCrisis = data.reply === 'CRISIS_ALERT';
       const replyContent = isCrisis ? data.message : data.reply;
 
-      setMessages((prev) => [
-        ...prev, 
-        { role: 'bot', content: replyContent, isCrisis }
-      ]);
+      setMessages((prev) => [...prev, { role: 'bot', content: replyContent, isCrisis }]);
 
-      // --- Von Restorff Notification Trigger ---
       if (!isOpenRef.current) {
         setUnreadCount(prev => prev + 1);
         setPreviewText(replyContent.substring(0, 40) + "...");
       }
-
-    } catch (error) {
+    } catch {
       setMessages((prev) => [
-        ...prev, 
+        ...prev,
         { role: 'bot', content: "I don't have that exact information right now, but our front desk team would love to help. Please call 020 8123 4567." }
       ]);
     } finally {
@@ -129,73 +119,75 @@ export default function ChatWidget() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-      
-      {/* --- The Chat Window (With Pop-In Animation) --- */}
+    <div className={styles.wrapper}>
+
+      {/* Chat Window */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 40, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 40, scale: 0.95, transition: { duration: 0.2 } }}
             transition={{ type: "spring", bounce: 0.3, duration: 0.5 }}
-            className="mb-4 w-80 md:w-96 flex flex-col h-[550px] max-h-[80vh] overflow-hidden rounded-3xl border border-white/50 bg-white/70 backdrop-blur-xl shadow-2xl shadow-blue-900/15"
+            className={styles.window}
             role="dialog"
             aria-label="Chat with Wellbeing Assistant"
           >
-            
+
             {/* Header */}
-            <div className="bg-blue-600/95 backdrop-blur-md px-5 py-4 text-white flex justify-between items-center shadow-sm">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-                  <span className="text-xl">🌿</span>
-                </div>
+            <div className={styles.header}>
+              <div className={styles.headerLeft}>
+                <div className={styles.avatar}>🌿</div>
                 <div>
-                  <h3 className="font-semibold text-sm">Wellbeing Assistant</h3>
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-                    <p className="text-[11px] text-blue-100 font-medium">Online</p>
+                  <p className={styles.botName}>Wellbeing Assistant</p>
+                  <div className={styles.statusRow}>
+                    <span className={styles.statusDot} />
+                    <span className={styles.statusText}>Online</span>
                   </div>
                 </div>
               </div>
-              <button 
-                onClick={() => setIsOpen(false)} 
-                className="p-2 rounded-full hover:bg-white/10 transition-colors focus:ring-2 focus:ring-white"
+              <button
+                onClick={() => setIsOpen(false)}
+                className={styles.closeBtn}
                 aria-label="Close chat"
               >
                 <X size={18} />
               </button>
             </div>
 
-            {/* Messages Area */}
-            <div className="flex-1 p-5 overflow-y-auto space-y-4">
+            {/* Messages */}
+            <div className={styles.messages}>
               {messages.map((msg, index) => (
-                <motion.div 
-                  initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                  key={index} 
-                  className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`${styles.messageRow} ${msg.role === 'user' ? styles.messageRowUser : styles.messageRowBot}`}
                 >
-                  <div className={`max-w-[85%] p-3.5 text-sm leading-relaxed ${
-                    msg.isCrisis 
-                      ? 'bg-rose-50 text-rose-900 border border-rose-200 rounded-2xl rounded-bl-sm shadow-sm' 
-                    : msg.role === 'user' 
-                      ? 'bg-blue-600 text-white rounded-2xl rounded-br-sm shadow-md shadow-blue-600/20' 
-                    : 'bg-white/90 text-gray-800 rounded-2xl rounded-bl-sm shadow-sm border border-white'
+                  <div className={`${styles.bubble} ${
+                    msg.isCrisis   ? styles.bubbleCrisis
+                    : msg.role === 'user' ? styles.bubbleUser
+                    : styles.bubbleBot
                   }`}>
-                    {msg.isCrisis && <AlertTriangle className="w-5 h-5 mb-2 text-rose-600" />}
+                    {msg.isCrisis && <AlertTriangle className={styles.crisisIcon} />}
                     {msg.content}
                   </div>
                 </motion.div>
               ))}
 
-              {/* Quick Replies (Only show if exactly 1 message exists) */}
+              {/* Quick Replies */}
               {messages.length === 1 && (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="flex flex-wrap gap-2 mt-4">
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className={styles.quickReplies}
+                >
                   {QUICK_REPLIES.map((reply) => (
-                    <button 
-                      key={reply} 
+                    <button
+                      key={reply}
                       onClick={() => handleSend(reply)}
-                      className="text-xs font-medium px-3 py-1.5 bg-white/60 hover:bg-white text-blue-800 border border-blue-100 rounded-full shadow-sm transition-all hover:shadow hover:-translate-y-0.5 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      className={styles.quickReply}
                     >
                       {reply}
                     </button>
@@ -203,59 +195,65 @@ export default function ChatWidget() {
                 </motion.div>
               )}
 
-              {/* HCI: Typing Indicator */}
+              {/* Typing Indicator */}
               {isLoading && (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
-                  <div className="bg-white/90 p-4 rounded-2xl rounded-bl-sm shadow-sm border border-white flex gap-1.5 items-center">
-                    {[0, 1, 2].map((dot) => (
-                      <motion.div 
-                        key={dot}
-                        className="w-1.5 h-1.5 bg-blue-400 rounded-full"
-                        animate={{ y: ["0%", "-50%", "0%"] }}
-                        transition={{ duration: 0.6, repeat: Infinity, delay: dot * 0.2, ease: "easeInOut" }}
-                      />
-                    ))}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className={styles.messageRowBot}
+                >
+                  <div className={styles.typingBubble}>
+                    <span className={styles.typingDot} />
+                    <span className={styles.typingDot} />
+                    <span className={styles.typingDot} />
                   </div>
                 </motion.div>
               )}
+
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Input Area */}
-            <form onSubmit={(e) => { e.preventDefault(); handleSend(input); }} className="p-3 bg-white/80 backdrop-blur-md border-t border-white/60 flex gap-2">
+            {/* Input */}
+            <form
+              onSubmit={(e) => { e.preventDefault(); handleSend(input); }}
+              className={styles.inputArea}
+            >
               <input
                 ref={inputRef}
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask me anything..."
-                className="flex-1 p-3 bg-white/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 border border-transparent focus:border-white transition-all text-gray-900 placeholder-gray-500"
+                className={styles.input}
                 disabled={isLoading}
               />
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 disabled={!input.trim() || isLoading}
-                className="bg-blue-600 text-white p-3 rounded-xl hover:bg-blue-700 disabled:opacity-50 disabled:hover:bg-blue-600 transition-colors shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 focus:outline-none"
+                className={styles.sendBtn}
                 aria-label="Send message"
               >
                 <Send size={18} />
               </button>
             </form>
+
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* --- The Floating Toggle Button & Von Restorff Notification --- */}
-      <div className="relative flex items-center gap-4">
-        
-        {/* Preview Toast (Von Restorff) */}
+      {/* FAB row */}
+      <div className={styles.fabRow}>
+
+        {/* Preview Toast */}
         <AnimatePresence>
           {!isOpen && unreadCount > 0 && (
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, scale: 0.9 }}
-              className="hidden md:block bg-white text-gray-800 px-4 py-2 rounded-2xl rounded-br-sm shadow-xl border border-gray-100 text-sm max-w-[200px] truncate"
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className={styles.toast}
             >
-              <span className="font-semibold text-blue-600">Bot: </span>{previewText}
+              <span className={styles.toastLabel}>Bot: </span>{previewText}
             </motion.div>
           )}
         </AnimatePresence>
@@ -264,18 +262,17 @@ export default function ChatWidget() {
         <button
           ref={chatButtonRef}
           onClick={() => setIsOpen(true)}
-          className={`${isOpen ? 'scale-0 opacity-0' : 'scale-100 opacity-100'} bg-blue-600 text-white p-4 rounded-full shadow-2xl hover:bg-blue-700 hover:shadow-blue-600/30 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-300 relative`}
+          className={`${styles.fab} ${isOpen ? styles.fabHidden : ''}`}
           aria-label="Open Wellbeing Assistant"
         >
           <MessageCircle size={28} />
-          
-          {/* Unread Badge (Von Restorff - highly contrasting Rose color) */}
+
+          {/* Unread Badge */}
           {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white shadow-sm animate-bounce">
-              {unreadCount}
-            </span>
+            <span className={styles.badge}>{unreadCount}</span>
           )}
         </button>
+
       </div>
     </div>
   );
