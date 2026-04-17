@@ -1,15 +1,18 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@clerk/nextjs';
+import { LayoutGrid, CalendarDays } from 'lucide-react';
 import styles from './page.module.css';
 import TicketCard from '../../components/programmes/Card';
 import FilterSidebar from '../../components/programmes/FilterSidebar';
+import CalendarView from '../../components/programmes/CalendarView';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 export default function DirectoryPage() {
   const { isSignedIn, getToken } = useAuth();
 
+  const [viewMode, setViewMode] = useState('list');
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({ category: [], day: [], time: [] });
   const [programmes, setProgrammes] = useState([]);
@@ -89,7 +92,25 @@ export default function DirectoryPage() {
 
         <main className={styles.resultsArea}>
           <div className={styles.resultsHeader}>
-            <h1 className={styles.resultsTitle}>All Programmes</h1>
+            <div className={styles.resultsTopRow}>
+              <h1 className={styles.resultsTitle}>All Programmes</h1>
+              <div className={styles.viewToggle}>
+                <button
+                  className={`${styles.toggleBtn} ${viewMode === 'list' ? styles.toggleActive : ''}`}
+                  onClick={() => setViewMode('list')}
+                  aria-label="List view"
+                >
+                  <LayoutGrid size={15} /> Grid
+                </button>
+                <button
+                  className={`${styles.toggleBtn} ${viewMode === 'calendar' ? styles.toggleActive : ''}`}
+                  onClick={() => setViewMode('calendar')}
+                  aria-label="Calendar view"
+                >
+                  <CalendarDays size={15} /> Calendar
+                </button>
+              </div>
+            </div>
             <div className={styles.resultsMeta}>
               {loading ? 'Loading…' : `Showing ${programmes.length} result${programmes.length !== 1 ? 's' : ''}`}
             </div>
@@ -119,7 +140,11 @@ export default function DirectoryPage() {
             </div>
           )}
 
-          {!error && programmes.map(item => {
+          {!error && viewMode === 'calendar' && (
+            <CalendarView programmes={programmes} bookedIds={bookedIds} />
+          )}
+
+          {!error && viewMode === 'list' && programmes.map(item => {
             const isBooked = bookedIds.has(String(item._id));
             return (
               <TicketCard

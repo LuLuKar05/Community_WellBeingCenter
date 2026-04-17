@@ -1,0 +1,244 @@
+/* CalendarView.module.css — weekly schedule grid */
+
+.wrapper {
+  width: 100%;
+}
+
+.empty {
+  padding: 40px;
+  text-align: center;
+  color: var(--color-text-secondary);
+  background: var(--color-bg-card);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-xl);
+}
+
+/* ── 7-column grid ─────────────────────────────────────────────────────────── */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(120px, 1fr));
+  gap: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  overflow-x: auto;
+}
+
+/* ── Day column ───────────────────────────────────────────────────────────── */
+
+.col {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-card);
+  border-right: 1px solid var(--color-border);
+  min-width: 120px;
+}
+
+.col:last-child {
+  border-right: none;
+}
+
+/* ── Column header ────────────────────────────────────────────────────────── */
+
+.colHeader {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 10px 8px;
+  background: var(--color-bg-subtle);
+  border-bottom: 1px solid var(--color-border);
+  min-height: 60px;
+}
+
+.dayShort {
+  display: none;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.dayFull {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.colCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  color: var(--color-bg-card);
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+/* ── Sessions list ────────────────────────────────────────────────────────── */
+
+.sessions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 6px;
+  flex: 1;
+}
+
+.quietDay {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+  padding: 16px 0;
+  opacity: 0.4;
+}
+
+/* ── Session card ─────────────────────────────────────────────────────────── */
+
+.card {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  background: var(--color-bg-page);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  text-decoration: none;
+  position: relative;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.cardBooked {
+  background: var(--color-success-bg);
+  border-color: var(--color-success);
+}
+
+/* Left accent bar */
+.bar {
+  width: 4px;
+  flex-shrink: 0;
+  align-self: stretch;
+}
+
+/* Card content */
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 7px 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.time {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-accent);
+  white-space: nowrap;
+}
+
+.title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.cat {
+  font-size: 0.6rem;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Booked tick badge */
+.tick {
+  position: absolute;
+  top: 4px;
+  right: 5px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--color-success-text);
+  line-height: 1;
+}
+
+/* ── Legend ───────────────────────────────────────────────────────────────── */
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.legendDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legendBooked {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--color-success-text);
+}
+
+/* ── Responsive ────────────────────────────────────────────────────────────── */
+
+/* Compact column headers on medium screens */
+@media (max-width: 900px) {
+  .dayFull  { display: none; }
+  .dayShort { display: block; }
+  .col      { min-width: 90px; }
+}
+
+@media (max-width: 600px) {
+  .col { min-width: 75px; }
+  .info { padding: 5px 6px; }
+}

@@ -21,9 +21,56 @@
 .resultsArea  { flex-grow: 1; min-width: 0; }
 .resultsHeader { margin-bottom: 24px; }
 
+.resultsTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+/* View toggle pill */
+.viewToggle {
+  display: flex;
+  gap: 0.2rem;
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 0.2rem;
+  flex-shrink: 0;
+}
+
+.toggleBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.9rem;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.toggleBtn:hover {
+  color: var(--color-primary);
+}
+
+.toggleActive {
+  background: var(--color-bg-card);
+  color: var(--color-primary);
+  box-shadow: var(--shadow-card);
+}
+
 .resultsTitle {
   font-size: 2rem;
-  margin: 0 0 10px 0;
+  margin: 0;
   color: var(--color-text-dark);
   font-weight: 700;
 }
